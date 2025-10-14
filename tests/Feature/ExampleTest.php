@@ -14,7 +14,9 @@ it('returns a successful response', function () {
 });
 
 it('works', function () {
-    $string = weave('Hello {{name}}!', ['world']);
+    //    $string = weave('Hello {{name:apa|between,w,r}}!', ['world']);
 
-    expect($string)->toBe('Hello world!');
+    $string = weave('{{:}} {{:}}', ['hep', 'haloo']);
+
+    expect($string)->toBe('Hello O!');
 });

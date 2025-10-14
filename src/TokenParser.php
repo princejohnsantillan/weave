@@ -3,7 +3,6 @@
 namespace PrinceJohn\Weave;
 
 use Illuminate\Support\Str;
-use PrinceJohn\Weave\Exceptions\BlankTokenException;
 use PrinceJohn\Weave\Exceptions\MalformedTokenException;
 
 class TokenParser
@@ -16,17 +15,23 @@ class TokenParser
     public function __construct(protected string $token)
     {
         if (blank($token)) {
-            throw new BlankTokenException;
+            throw MalformedTokenException::blankToken();
         }
 
         if (Str::substrCount($token, ':') > 1) {
-            throw MalformedTokenException::multipleColonDetected();
+            throw MalformedTokenException::multipleColon();
         }
 
         $this->key = Str::before($token, ':');
 
         if (Str::contains($token, ':')) {
-            $this->identifyFunctions(Str::after($token, ':'));
+            $functionsString = Str::after($token, ':');
+
+            if ($functionsString === '') {
+                throw MalformedTokenException::blankFunction();
+            }
+
+            $this->identifyFunctions($functionsString);
         }
 
     }
@@ -46,16 +51,6 @@ class TokenParser
 
             $this->functions[] = new FunctionBlueprint($method, $parameters);
         }
-    }
-
-    public function isGenerator(): bool
-    {
-        return $this->token === '';
-    }
-
-    public function isTransformer(): bool
-    {
-        return $this->token !== '';
     }
 
     public function getKey(): ?string
