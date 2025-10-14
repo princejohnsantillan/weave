@@ -6,5 +6,5 @@ use PrinceJohn\Weave\FunctionBlueprint;
 
 interface StringManipulator
 {
-    public static function handle(FunctionBlueprint $blueprint, string $string): string;
+    public static function handle(FunctionBlueprint $blueprint, ?string $string): string;
 }

@@ -14,9 +14,7 @@ it('returns a successful response', function () {
 });
 
 it('works', function () {
-    //    $string = weave('Hello {{name:apa|between,w,r}}!', ['world']);
+    $string = weave('{{:config}}', ['weave.token_regex']);
 
-    $string = weave('{{:now,Y-m-d j}} ', ['hahahah', 'haloo']);
-
-    expect($string)->toBe('Hello O!');
+    expect($string)->toBe(config('weave.token_regex'));
 });
