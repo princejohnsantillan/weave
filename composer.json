@@ -1,0 +1,42 @@
+{
+    "name": "princejohnsantillan/weave",
+    "description": "An easy and elegant way to format and stub strings.",
+    "authors": [
+        {
+            "name": "Prince John Santillan",
+            "email": "iam@princejohn.dev"
+        }
+    ],
+    "keywords" : [
+        "elegant", "string", "format", "stub", "interpolate"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "illuminate/support": "^12.33"
+    },
+    "autoload": {
+        "psr-4": {
+            "PrinceJohn\\Weave\\": "src/"
+        },
+        "files": [
+            "src/functions.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "laravel/pint": "^1.25",
+        "orchestra/testbench": "^10.6",
+        "larastan/larastan": "^3.7",
+        "pestphp/pest": "^4.1"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
