@@ -41,6 +41,12 @@
             ]
         }
     },
+    "scripts": {
+        "qa": [
+            "@php vendor/bin/pint",
+            "@php vendor/bin/phpstan --memory-limit=-1"
+        ]
+    },
     "config": {
         "allow-plugins": {
             "pestphp/pest-plugin": true
