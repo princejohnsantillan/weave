@@ -48,7 +48,7 @@ class Weaver
         return resolve(Contracts\StringResolver::class)->handle($parser, $string);
     }
 
-    protected function getVariable(string $key): ?string
+    protected function getVariable(string|int $key): ?string
     {
         return $this->variables[$key] ?? null;
     }

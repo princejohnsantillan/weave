@@ -40,7 +40,7 @@ class TokenParser
     {
         $functions = explode('|', $functionsString);
 
-        if ($functions === []) {
+        if (blank($functions)) {
             return;
         }
 
