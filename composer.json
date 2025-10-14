@@ -12,7 +12,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.4",
+        "php": "^8.2",
         "illuminate/support": "^12.33"
     },
     "autoload": {
@@ -32,7 +32,7 @@
         "laravel/pint": "^1.25",
         "orchestra/testbench": "^10.6",
         "larastan/larastan": "^3.7",
-        "pestphp/pest": "^4.1"
+        "pestphp/pest": "^v3.8"
     },
     "config": {
         "allow-plugins": {

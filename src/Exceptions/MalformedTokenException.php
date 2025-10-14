@@ -8,6 +8,6 @@ final class MalformedTokenException extends Exception
 {
     public static function multipleColonDetected(): MalformedTokenException
     {
-        return new MalformedTokenException("A token can only have up to one colon.");
+        return new MalformedTokenException('A token cannot have more than one colon.');
     }
 }

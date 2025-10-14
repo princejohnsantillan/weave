@@ -2,7 +2,8 @@
 
 namespace PrinceJohn\Weave;
 
-function weave(string $subject, array $variables = []): string {
+function weave(string $subject, array $variables = []): string
+{
 
-    return $subject;
+    return (new Weaver($subject, $variables))->weave();
 }

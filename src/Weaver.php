@@ -3,93 +3,67 @@
 namespace PrinceJohn\Weave;
 
 use Illuminate\Support\Str;
+use PrinceJohn\Weave\Exceptions\TokenMatchingFailedException;
 
 class Weaver
 {
-    private bool $variablesArrayIsList;
+    protected bool $variablesArrayIsList;
+
+    protected int $tokenCount;
+
+    protected array $placeholders;
+
+    protected array $tokens;
 
     public function __construct(
-        private string $subject,
-        private array $variables = []
+        protected string $subject,
+        protected array $variables = []
     ) {
         $this->variablesArrayIsList = array_is_list($this->variables);
 
-//        $this->compatibilityCheck();
-    }
+        $count = preg_match_all('/(?<!\\\\)\{\{\s*([^{}]*?)\s*\}\}(?<!\\\\)/', $subject, $matches);
 
-//    private function compatibilityCheck(): bool
-//    {
-//        if ($this->variablesArrayIsList) {
-//            if (count($this->variables) !== count($this->getTokens())) {
-//                throw new \Exception("Number of tokens and variables does not match.");
-//            }
-//        }
-//
-//        return true;
-//    }
-
-    private function getTokens(): array
-    {
-        $tokens = [];
-
-        preg_match_all('/(?<!\\\\)\{([^{}]*)\}(?<!\\\\)/', $this->subject, $tokens);
-
-        return $tokens[0];
-    }
-
-    private function prepareVariables(): array
-    {
-        $tokens = $this->getTokens();
-
-        $map = [];
-
-        foreach ($tokens as $i => $token) {
-            $map[$token] = $this->getFinalValue($i, $token);
+        if ($count === false) {
+            throw new TokenMatchingFailedException;
         }
 
-        return $map;
+        $this->tokenCount = $count;
+
+        [$this->placeholders, $this->tokens] = $matches;
     }
 
-    private function getFinalValue(int $index, string $token)
+    protected function resolveString(int $index, string $token): ?string
     {
-        $token = Str::squish(Str::between($token, "{{", "}}"));
-        $key = Str::before($token, ":");
+        $parser = new TokenParser($token);
 
-        if(blank($key)){
-            throw new \Exception("Key not found.");
-        }
+        $key = $parser->getKey();
 
-        $value = $this->variables[$this->variablesArrayIsList ? $index : $key];
+        $string = $this->variablesArrayIsList
+            ? $this->getVariable($index)
+            : (is_null($key) ? null : $this->getVariable($key));
 
-        $tokenParts = explode(":", $token);
+        return (new StringResolver)->handle($parser, $string);
+    }
 
-        if (collect($tokenParts)->count() > 1) {
-            $transformersString = $tokenParts[1] ?? "";
-
-            $transformers = collect(explode("|", $transformersString))->map(
-                fn ($transformer) => Str::squish($transformer)
-            );
-
-            foreach ($transformers as $transformer) {
-                $value = match($transformer){
-                    'config' => config($value),
-                    default => Str::{$transformer}($value), //Use php's call user func?
-                };
-            }
-        }
-
-        return $value;
+    protected function getVariable(string $key): ?string
+    {
+        return $this->variables[$key] ?? null;
     }
 
     public function weave(): string
     {
-        $finalVariables = $this->prepareVariables();
+        $weaved = $this->subject;
 
-        $keys = array_keys($finalVariables);
-        $values = array_values($finalVariables);
+        foreach ($this->tokens as $i => $token) {
+            $resolvedString = $this->resolveString($i, $token);
 
-        return Str::of($this->subject)
-            ->replace($keys, $values)
-            ->value();
+            if ($resolvedString === null) {
+                continue;
+            }
+
+            $weaved = Str::replaceFirst($this->placeholders[$i], $resolvedString, $weaved);
+        }
+
+        return $weaved;
     }
 }

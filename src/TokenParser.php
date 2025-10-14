@@ -10,59 +10,62 @@ class TokenParser
 {
     protected string $key;
 
-
-    /** @var string[]  */
+    /** @var FunctionBlueprint[] */
     protected array $functions = [];
-
 
     public function __construct(protected string $token)
     {
-        $cleanToken = Str::of($this->token)->between('{{', '}}')->trim();
-
-        if(blank($cleanToken)) {
+        if (blank($token)) {
             throw new BlankTokenException;
         }
 
-        if(Str::substrCount($cleanToken, ':') > 1) {
+        if (Str::substrCount($token, ':') > 1) {
             throw MalformedTokenException::multipleColonDetected();
         }
 
-        $this->key = Str::before($cleanToken, ":");
+        $this->key = Str::before($token, ':');
 
+        if (Str::contains($token, ':')) {
+            $this->identifyFunctions(Str::after($token, ':'));
+        }
 
-        $functionStrings = explode("|", Str::after($cleanToken, ":"));
-
-        $this->identifyFunctions($functionStrings);
     }
 
-    protected function identifyFunctions(array $functionStrings): void{
-        if($functionStrings === []){
+    private function identifyFunctions(string $functionsString): void
+    {
+        $functions = explode('|', $functionsString);
+
+        if ($functions === []) {
             return;
         }
 
-        foreach($functionStrings as $functionString){
-
-            $parameters = explode(',', $functionString);
+        foreach ($functions as $function) {
+            $parameters = explode(',', $function);
 
             $method = array_shift($parameters);
 
-            $this->functions[]  = [$method, $parameters];
+            $this->functions[] = new FunctionBlueprint($method, $parameters);
         }
     }
 
-    public function isGenerator(): bool{
-        return $this->token === "";
+    public function isGenerator(): bool
+    {
+        return $this->token === '';
     }
 
-    public function isTransformer(): bool{
-        return $this->token !== "";
+    public function isTransformer(): bool
+    {
+        return $this->token !== '';
     }
 
-    public function getKey(): string{
-        return $this->key;
+    public function getKey(): ?string
+    {
+        return $this->key === '' ? null : $this->key;
     }
 
-    public function getFunctions(): array{
+    /** @return FunctionBlueprint[] */
+    public function getFunctions(): array
+    {
         return $this->functions;
     }
 }
