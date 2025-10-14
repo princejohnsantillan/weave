@@ -16,7 +16,7 @@ it('returns a successful response', function () {
 it('works', function () {
     //    $string = weave('Hello {{name:apa|between,w,r}}!', ['world']);
 
-    $string = weave('{{checksum:pipe,md5|prepend,checksum-}} ', ['hahahah', 'haloo']);
+    $string = weave('{{:now,Y-m-d j}} ', ['hahahah', 'haloo']);
 
     expect($string)->toBe('Hello O!');
 });

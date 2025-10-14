@@ -2,7 +2,9 @@
 
 namespace PrinceJohn\Weave;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
+use PrinceJohn\Weave\Contracts\StringManipulator;
 use PrinceJohn\Weave\Exceptions\UnsupportedStringFunctionException;
 
 class StringResolver implements Contracts\StringResolver
@@ -18,6 +20,12 @@ class StringResolver implements Contracts\StringResolver
 
     protected function manipulateString(FunctionBlueprint $blueprint, ?string $string): string
     {
+        $resolvedString = $this->useCustomManipulators($blueprint, $string);
+
+        if ($resolvedString !== false) {
+            return $resolvedString;
+        }
+
         $stringAndParameters = array_merge([$string], $blueprint->parameters);
         $parametersAndString = array_merge($blueprint->parameters, [$string]);
 
@@ -105,5 +113,21 @@ class StringResolver implements Contracts\StringResolver
             'wrap' => Str::wrap(...$stringAndParameters),
             default => throw new UnsupportedStringFunctionException($blueprint->function),
         };
+    }
+
+    protected function useCustomManipulators(FunctionBlueprint $blueprint, ?string $string): false|string
+    {
+
+        $manipulator = Config::array('weave.string_manipulators', [])[$blueprint->function] ?? null;
+
+        if ($manipulator === null) {
+            return false;
+        }
+
+        if (! is_a($manipulator, StringManipulator::class, true)) {
+            return false;
+        }
+
+        return $manipulator::handle($blueprint, $string);
     }
 }

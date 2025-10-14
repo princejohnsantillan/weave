@@ -2,6 +2,7 @@
 
 namespace PrinceJohn\Weave;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use PrinceJohn\Weave\Exceptions\TokenMatchingFailedException;
 
@@ -21,7 +22,9 @@ class Weaver
     ) {
         $this->variablesArrayIsList = array_is_list($this->variables);
 
-        $count = preg_match_all('/(?<!\\\\)\{\{\s*([^{}]*?)\s*\}\}(?<!\\\\)/', $subject, $matches);
+        $pattern = Config::string('weaver.token_regex', '/(?<!\\\\)\{\{\s*([^{}]*?)\s*\}\}(?<!\\\\)/');
+
+        $count = preg_match_all($pattern, $subject, $matches);
 
         if ($count === false) {
             throw new TokenMatchingFailedException;
@@ -42,7 +45,7 @@ class Weaver
             ? $this->getVariable($index)
             : (is_null($key) ? null : $this->getVariable($key));
 
-        return (new StringResolver)->handle($parser, $string);
+        return resolve(Contracts\StringResolver::class)->handle($parser, $string);
     }
 
     protected function getVariable(string $key): ?string
