@@ -9,12 +9,8 @@ class ConfigString implements StringManipulator
 {
     public static function handle(FunctionBlueprint $blueprint, ?string $string): string
     {
-        $key = $string ?? $blueprint->parameters[0] ?? null;
-
-        if ($key === null) {
-            return '';
-        }
-
-        return config($key) ?? '';
+        return $blueprint->hasParameters()
+            ? config($blueprint->firstParameter(), '')
+            : '';
     }
 }

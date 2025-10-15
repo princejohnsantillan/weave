@@ -30,8 +30,8 @@ class StringResolver implements Contracts\StringResolver
         $parametersAndString = array_merge($blueprint->parameters, [$string]);
 
         return match ($blueprint->function) {
-            'after' => Str::after(...$stringAndParameters),
-            'after_last' => Str::afterLast(...$stringAndParameters),
+            'after' => Str::after($string, $blueprint->firstParameter()),
+            'after_last' => Str::afterLast($string, $blueprint->firstParameter()),
             'apa', => Str::apa($string),
             'append' => Str::of($string)->append(...$blueprint->parameters)->toString(),
             'ascii' => Str::ascii(...$stringAndParameters),
@@ -117,7 +117,6 @@ class StringResolver implements Contracts\StringResolver
 
     protected function useCustomManipulators(FunctionBlueprint $blueprint, ?string $string): false|string
     {
-
         $manipulator = Config::array('weave.string_manipulators', [])[$blueprint->function] ?? null;
 
         if ($manipulator === null) {

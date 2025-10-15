@@ -9,6 +9,8 @@ class NowString implements StringManipulator
 {
     public static function handle(FunctionBlueprint $blueprint, ?string $string): string
     {
-        return now()->format(...$blueprint->parameters);
+        return $blueprint->hasParameters()
+            ? now()->format($blueprint->firstParameter())
+            : now();
     }
 }
