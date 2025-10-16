@@ -22,11 +22,15 @@ class TokenParser
             throw MalformedTokenException::blankToken();
         }
 
-        if (Str::substrCount($token, ':') > 1) {
-            throw MalformedTokenException::multipleColon();
-        }
+        if (Str::contains($token, ':')) {
+            $key = Str::of($token)->before(':')->trim()->toString();
 
-        $this->key = Str::of($token)->before(':')->trim()->toString();
+            if (filled($key)) {
+                $this->key = $key;
+            }
+        } else {
+            $this->key = $token;
+        }
 
         if (Str::contains($token, ':')) {
             $functionsString = Str::of($token)->after(':')->trim()->toString();
@@ -37,11 +41,29 @@ class TokenParser
 
             $this->identifyFunctions($functionsString);
         }
-
     }
 
     private function identifyFunctions(string $functionsString): void
     {
+        /**
+         * This is to allow for escaping "|" and ","
+         * since they are special characters to the parser.
+         */
+        $pipeId = uniqid('PIPE:');
+        $commaId = uniqid('COMMA:');
+
+        $mark = [
+            "\|" => $pipeId,
+            "\," => $commaId,
+        ];
+
+        $unmark = [
+            $pipeId => '|',
+            $commaId => ',',
+        ];
+
+        $functionsString = Str::swap($mark, $functionsString);
+
         $functions = explode('|', $functionsString);
 
         if (blank($functions)) {
@@ -52,6 +74,12 @@ class TokenParser
             $parameters = explode(',', $function);
 
             $method = array_shift($parameters);
+
+            $method = Str::swap($unmark, $method);
+
+            array_walk($parameters, function (&$parameter) use ($unmark) {
+                $parameter = Str::swap($unmark, $parameter);
+            });
 
             $this->functionDefinitionList[] = new FunctionDefinition($method, $parameters);
         }
