@@ -2,15 +2,17 @@
 
 namespace PrinceJohn\Weave\Manipulators;
 
+use Illuminate\Support\Facades\Config;
 use PrinceJohn\Weave\Contracts\StringManipulator;
-use PrinceJohn\Weave\FunctionBlueprint;
+use PrinceJohn\Weave\FunctionDefinition;
 
 class ConfigString implements StringManipulator
 {
-    public static function handle(FunctionBlueprint $blueprint, ?string $string): string
+    public static function handle(FunctionDefinition $definition, ?string $string): string
     {
-        return $blueprint->hasParameters()
-            ? config($blueprint->firstParameter(), '')
-            : '';
+        return Config::string(
+            $definition->firstParameterOrFail($string),
+            $definition->getParameterOrFail(1, '')
+        );
     }
 }

@@ -2,9 +2,9 @@
 
 namespace PrinceJohn\Weave\Contracts;
 
-use PrinceJohn\Weave\FunctionBlueprint;
+use PrinceJohn\Weave\FunctionDefinition;
 
 interface StringManipulator
 {
-    public static function handle(FunctionBlueprint $blueprint, ?string $string): string;
+    public static function handle(FunctionDefinition $definition, ?string $string): string;
 }

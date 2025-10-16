@@ -9,8 +9,8 @@ class TokenParser
 {
     protected string $key;
 
-    /** @var FunctionBlueprint[] */
-    protected array $functions = [];
+    /** @var FunctionDefinition[] */
+    protected array $functionDefinitionList = [];
 
     public function __construct(protected string $token)
     {
@@ -49,7 +49,7 @@ class TokenParser
 
             $method = array_shift($parameters);
 
-            $this->functions[] = new FunctionBlueprint($method, $parameters);
+            $this->functionDefinitionList[] = new FunctionDefinition($method, $parameters);
         }
     }
 
@@ -58,9 +58,9 @@ class TokenParser
         return $this->key === '' ? null : $this->key;
     }
 
-    /** @return FunctionBlueprint[] */
-    public function getFunctions(): array
+    /** @return FunctionDefinition[] */
+    public function getFunctionDefinitionList(): array
     {
-        return $this->functions;
+        return $this->functionDefinitionList;
     }
 }

@@ -2,7 +2,9 @@
 
 namespace PrinceJohn\Weave;
 
-readonly class FunctionBlueprint
+use PrinceJohn\Weave\Exceptions\ParameterDoesNotExistException;
+
+readonly class FunctionDefinition
 {
     public function __construct(
         public string $function,
@@ -18,6 +20,17 @@ readonly class FunctionBlueprint
     public function getParameter(int $index, ?string $default = null): ?string
     {
         return $this->parameters[$index] ?? $default;
+    }
+
+    public function getParameterOrFail(int $index, ?string $default = null): string
+    {
+        $parameter = $this->getParameter($index, $default);
+
+        if (is_null($parameter)) {
+            throw new ParameterDoesNotExistException;
+        }
+
+        return $parameter;
     }
 
     /** @return array<string|null> */
@@ -42,8 +55,24 @@ readonly class FunctionBlueprint
         return $parameters;
     }
 
-    public function firstParameter(): ?string
+    public function limitParameters(int $limit): array
     {
-        return $this->getParameter(0);
+        $limit = max(0, $limit - 1);
+
+        if ($limit === 0) {
+            return [];
+        }
+
+        return $this->getParameters(range(0, $limit));
+    }
+
+    public function firstParameter(?string $default = null): ?string
+    {
+        return $this->getParameter(0, $default);
+    }
+
+    public function firstParameterOrFail(?string $default = null): string
+    {
+        return $this->getParameterOrFail(0, $default);
     }
 }

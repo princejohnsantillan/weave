@@ -3,14 +3,14 @@
 namespace PrinceJohn\Weave\Manipulators;
 
 use PrinceJohn\Weave\Contracts\StringManipulator;
-use PrinceJohn\Weave\FunctionBlueprint;
+use PrinceJohn\Weave\FunctionDefinition;
 
 class NowString implements StringManipulator
 {
-    public static function handle(FunctionBlueprint $blueprint, ?string $string): string
+    public static function handle(FunctionDefinition $definition, ?string $string): string
     {
-        return $blueprint->hasParameters()
-            ? now()->format($blueprint->firstParameter())
+        return $definition->hasParameters()
+            ? now()->format($definition->firstParameterOrFail())
             : now();
     }
 }

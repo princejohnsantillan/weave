@@ -7,117 +7,120 @@ use Illuminate\Support\Str;
 use PrinceJohn\Weave\Contracts\StringManipulator;
 use PrinceJohn\Weave\Exceptions\UnsupportedStringFunctionException;
 
+use function Safe\base64_decode;
+
 class StringResolver implements Contracts\StringResolver
 {
     public function handle(TokenParser $parser, ?string $string = null): ?string
     {
-        foreach ($parser->getFunctions() as $blueprint) {
-            $string = $this->manipulateString($blueprint, $string);
+        foreach ($parser->getFunctionDefinitionList() as $definition) {
+            $string = $this->manipulateString($definition, $string);
         }
 
         return $string;
     }
 
-    protected function manipulateString(FunctionBlueprint $blueprint, ?string $string): string
+    protected function manipulateString(FunctionDefinition $definition, ?string $string): string
     {
-        $resolvedString = $this->useCustomManipulators($blueprint, $string);
+        $resolvedString = $this->useCustomManipulators($definition, $string);
 
         if ($resolvedString !== false) {
             return $resolvedString;
         }
 
-        $stringAndParameters = array_merge([$string], $blueprint->parameters);
-        $parametersAndString = array_merge($blueprint->parameters, [$string]);
+        $params = $definition->parameters;
+        $first = $definition->firstParameter();
+        $stringAndParams = array_merge([$string], $params);
 
-        return match ($blueprint->function) {
-            'after' => Str::after($string, $blueprint->firstParameter()),
-            'after_last' => Str::afterLast($string, $blueprint->firstParameter()),
+        return match ($definition->function) {
+            'after' => Str::of($string)->after($first),
+            'after_last' => Str::of($string)->afterLast($first),
             'apa', => Str::apa($string),
-            'append' => Str::of($string)->append(...$blueprint->parameters)->toString(),
-            'ascii' => Str::ascii(...$stringAndParameters),
-            'basename' => Str::of($string)->basename(...$blueprint->parameters)->toString(),
-            'before' => Str::before(...$stringAndParameters),
-            'before_last' => Str::beforeLast(...$stringAndParameters),
-            'between' => Str::between(...$stringAndParameters),
-            'between_first' => Str::betweenFirst(...$stringAndParameters),
+            'append' => Str::of($string)->append(...$params),
+            'ascii' => Str::ascii(...$stringAndParams),
+            'basename' => basename(...$stringAndParams),
+            'before' => Str::of($string)->before($first),
+            'before_last' => Str::of($string)->beforeLast($first),
+            'between' => Str::of($string)->between(...$definition->getParameters([0, 1])),
+            'between_first' => Str::of($string)->betweenFirst(...$definition->getParameters([0, 1])),
             'camel' => Str::camel($string),
-            'char_at' => (string) Str::charAt(...$stringAndParameters),
-            'chop_start' => Str::chopStart(...$stringAndParameters),
-            'chop_end' => Str::chopEnd(...$stringAndParameters),
-            'class_basename' => Str::of($string)->classBasename()->toString(),
-            'decrypt' => Str::of($string)->decrypt(...$blueprint->parameters)->toString(),
-            'deduplicate' => Str::deduplicate(...$stringAndParameters),
-            'dirname' => Str::of($string)->dirname(...$blueprint->parameters)->toString(),
-            'e' => e(...$stringAndParameters),
-            'encrypt' => Str::of($string)->encrypt(...$blueprint->parameters)->toString(),
-            'finish' => Str::finish(...$stringAndParameters),
-            'from_base64' => (string) Str::fromBase64(...$stringAndParameters),
-            'hash' => Str::of($string)->hash(...$blueprint->parameters)->toString(),
+            'char_at' => Str::of($string)->charAt($first),
+            'chop_start' => Str::of($string)->chopStart($first),
+            'chop_end' => Str::of($string)->chopEnd($first),
+            'class_basename' => class_basename($string),
+            'decrypt' => decrypt(...$stringAndParams),
+            'deduplicate' => Str::deduplicate(...$stringAndParams),
+            'dirname' => dirname(...$stringAndParams),
+            'e' => e(...$stringAndParams),
+            'encrypt' => encrypt(...$stringAndParams),
+            'finish' => Str::of($string)->finish($first),
+            'from_base64' => base64_decode(...$stringAndParams),
+            'hash' => Str::of($string)->hash($first),
             'headline' => Str::headline($string),
             'inline_markdown' => Str::inlineMarkdown($string),
             'kebab' => Str::kebab($string),
             'lcfirst' => Str::lcfirst($string),
-            'length' => Str::length(...$stringAndParameters),
-            'limit' => Str::limit(...$stringAndParameters),
+            'length' => Str::length(...$stringAndParams),
+            'limit' => Str::limit(...$stringAndParams),
             'lower' => Str::lower($string),
             'markdown' => Str::markdown($string),
-            'mask' => Str::mask(...$stringAndParameters),
-            'match' => Str::match(...$stringAndParameters),
-            'newline' => Str::of($string)->newLine(...$blueprint->parameters)->toString(),
+            'mask' => Str::of($string)->mask(...$params),
+            'match' => Str::of($string)->match($first),
+            'newline' => Str::of($string)->newLine($definition->firstParameter(1)),
             'ordered_uuid' => (string) Str::orderedUuid(),
-            'pad_both' => Str::padBoth(...$stringAndParameters),
-            'pad_left' => Str::padLeft(...$stringAndParameters),
-            'pad_right' => Str::padRight(...$stringAndParameters),
-            'pipe' => Str::of($string)->pipe(...$blueprint->parameters)->toString(),
-            'password' => Str::password(...$blueprint->parameters),
-            'plural' => Str::plural(...$stringAndParameters),
-            'plural_studly' => Str::pluralStudly(...$stringAndParameters),
-            'position' => (string) Str::position(...$stringAndParameters),
-            'prepend' => Str::of($string)->prepend(...$blueprint->parameters)->toString(),
-            'random' => Str::random(...$blueprint->parameters),
-            'remove' => Str::of($string)->remove(...$blueprint->parameters)->toString(),
-            'repeat' => Str::repeat(...$stringAndParameters),
-            'replace' => Str::of($string)->replace(...$blueprint->parameters)->toString(),
-            'replace_first' => Str::replaceFirst(...$parametersAndString),
-            'replace_last' => Str::replaceLast(...$parametersAndString),
-            'replace_matches' => Str::of($string)->replaceMatches(...$blueprint->parameters)->toString(),
-            'replace_start' => Str::replaceStart(...$parametersAndString),
-            'replace_end' => Str::replaceEnd(...$parametersAndString),
+            'pad_both' => Str::of($string)->padBoth(...$params),
+            'pad_left' => Str::of($string)->padLeft(...$params),
+            'pad_right' => Str::of($string)->padRight(...$params),
+            'pipe' => Str::of($string)->pipe($first),
+            'password' => Str::password(...$params),
+            'plural' => Str::plural(...$stringAndParams),
+            'plural_studly' => Str::pluralStudly(...$stringAndParams),
+            'position' => (string) Str::position(...$stringAndParams),
+            'prepend' => Str::of($string)->prepend(...$params),
+            'random' => Str::random(...$params),
+            'remove' => Str::of($string)->remove(...$params),
+            'repeat' => Str::of($string)->repeat($first),
+            'replace' => Str::of($string)->replace(...$params),
+            'replace_first' => Str::of($string)->replaceFirst(...$params),
+            'replace_last' => Str::of($string)->replaceLast(...$params),
+            'replace_matches' => Str::of($string)->replaceMatches(...$params),
+            'replace_start' => Str::of($string)->replaceStart(...$params),
+            'replace_end' => Str::of($string)->replaceEnd(...$params),
             'reverse' => Str::reverse($string),
             'singular' => Str::singular($string),
-            'slug' => Str::slug(...$stringAndParameters),
-            'snake' => Str::snake(...$stringAndParameters),
+            'slug' => Str::slug(...$stringAndParams),
+            'snake' => Str::snake(...$stringAndParams),
             'squish' => Str::squish($string),
-            'start' => Str::start(...$stringAndParameters),
-            'strip_tags' => Str::of($string)->stripTags(...$blueprint->parameters)->toString(),
+            'start' => Str::of($string)->start($first),
+            'strip_tags' => strip_tags(...$stringAndParams),
             'studly' => Str::studly($string),
-            'substr' => Str::substr(...$stringAndParameters),
-            'substr_count' => Str::substrCount(...$stringAndParameters),
-            'substr_replace' => Str::of($string)->substrReplace(...$blueprint->parameters)->toString(),
-            'take' => Str::take(...$stringAndParameters),
+            'substr' => Str::of($string)->substr(...$params),
+            'substr_count' => Str::of($string)->substrCount(...$params),
+            'substr_replace' => Str::of($string)->substrReplace(...$params),
+            'take' => Str::of($string)->take($first),
             'title' => Str::title($string),
-            'to_base64' => Str::toBase64($string),
-            'transliterate' => Str::transliterate(...$stringAndParameters),
-            'trim' => Str::trim(...$stringAndParameters),
-            'ltrim' => Str::ltrim(...$stringAndParameters),
-            'rtrim' => Str::rtrim(...$stringAndParameters),
+            'to_base64' => base64_encode($string),
+            'transliterate' => Str::transliterate(...$stringAndParams),
+            'trim' => Str::trim(...$stringAndParams),
+            'ltrim' => Str::ltrim(...$stringAndParams),
+            'rtrim' => Str::rtrim(...$stringAndParams),
             'ucfirst' => Str::ucfirst($string),
             'upper' => Str::upper($string),
             'ulid' => (string) Str::ulid(),
-            'unwrap' => Str::unwrap(...$stringAndParameters),
+            'unwrap' => Str::of($string)->unwrap($params),
             'uuid' => (string) Str::uuid(),
             'uuid7' => (string) Str::uuid7(),
-            'word_count' => Str::wordCount(...$stringAndParameters),
-            'word_wrap' => Str::wordWrap(...$stringAndParameters),
-            'words' => Str::words(...$stringAndParameters),
-            'wrap' => Str::wrap(...$stringAndParameters),
-            default => throw new UnsupportedStringFunctionException($blueprint->function),
+            'word_count' => Str::wordCount(...$stringAndParams),
+            'word_wrap' => Str::wordWrap(...$stringAndParams),
+            'words' => Str::words(...$stringAndParams),
+            'wrap' => Str::of($string)->wrap(...$params),
+            default => throw new UnsupportedStringFunctionException($definition->function),
         };
     }
 
-    protected function useCustomManipulators(FunctionBlueprint $blueprint, ?string $string): false|string
+    protected function useCustomManipulators(FunctionDefinition $definition, ?string $string): false|string
     {
-        $manipulator = Config::array('weave.string_manipulators', [])[$blueprint->function] ?? null;
+        $manipulator = Config::array('weave.string_manipulators', [])[$definition->function] ?? null;
 
         if ($manipulator === null) {
             return false;
@@ -127,6 +130,6 @@ class StringResolver implements Contracts\StringResolver
             return false;
         }
 
-        return $manipulator::handle($blueprint, $string);
+        return $manipulator::handle($definition, $string);
     }
 }

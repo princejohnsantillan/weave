@@ -4,13 +4,13 @@ use PrinceJohn\Weave\TokenParser;
 
 use function PrinceJohn\Weave\weave;
 
-it('returns a successful response', function () {
+it('can parse a token', function () {
     $parser = new TokenParser('aloha:upper|kebab');
 
     expect($parser->getKey())->toBe('aloha');
-    expect($parser->getFunctions())->toHaveCount(2);
-    expect($parser->getFunctions()[0]->function)->toBe('upper');
-    expect($parser->getFunctions()[1]->function)->toBe('kebab');
+    expect($parser->getFunctionDefinitionList())->toHaveCount(2);
+    expect($parser->getFunctionDefinitionList()[0]->function)->toBe('upper');
+    expect($parser->getFunctionDefinitionList()[1]->function)->toBe('kebab');
 });
 
 it('works', function () {
