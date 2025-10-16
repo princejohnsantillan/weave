@@ -18,9 +18,9 @@ weave("Today is {{:now,Y-m-d}}!"); // Today is 2025-10-14!
 weave("{{title:headline}}", ["this is a breaking news"]) //This Is A Breaking News
 ```
 
-## Available Manipulators
+## Available Functions
 
-All of these are based off of Laravel's string helpers, [see here](https://laravel.com/docs/12.x/strings).
+All of these functions are based off of Laravel's string helpers, [see here](https://laravel.com/docs/12.x/strings).
 
 - [after](https://laravel.com/docs/12.x/strings#method-fluent-str-after)
 - [after_last](https://laravel.com/docs/12.x/strings#method-fluent-str-after-last)

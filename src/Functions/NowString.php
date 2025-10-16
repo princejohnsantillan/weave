@@ -1,11 +1,11 @@
 <?php
 
-namespace PrinceJohn\Weave\Manipulators;
+namespace PrinceJohn\Weave\Functions;
 
-use PrinceJohn\Weave\Contracts\StringManipulator;
+use PrinceJohn\Weave\Contracts\StringFunction;
 use PrinceJohn\Weave\FunctionDefinition;
 
-class NowString implements StringManipulator
+class NowString implements StringFunction
 {
     public static function handle(FunctionDefinition $definition, ?string $string): string
     {

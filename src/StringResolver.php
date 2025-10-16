@@ -4,7 +4,7 @@ namespace PrinceJohn\Weave;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
-use PrinceJohn\Weave\Contracts\StringManipulator;
+use PrinceJohn\Weave\Contracts\StringFunction;
 use PrinceJohn\Weave\Exceptions\UnsupportedStringFunctionException;
 
 class StringResolver implements Contracts\StringResolver
@@ -12,15 +12,15 @@ class StringResolver implements Contracts\StringResolver
     public function handle(TokenParser $parser, ?string $string = null): ?string
     {
         foreach ($parser->getFunctionDefinitionList() as $definition) {
-            $string = $this->manipulateString($definition, $string);
+            $string = $this->resolveString($definition, $string);
         }
 
         return $string;
     }
 
-    protected function manipulateString(FunctionDefinition $definition, ?string $string): string
+    protected function resolveString(FunctionDefinition $definition, ?string $string): string
     {
-        $resolvedString = $this->useCustomManipulators($definition, $string);
+        $resolvedString = $this->useCustomFunctions($definition, $string);
 
         if ($resolvedString !== false) {
             return $resolvedString;
@@ -116,18 +116,18 @@ class StringResolver implements Contracts\StringResolver
         };
     }
 
-    protected function useCustomManipulators(FunctionDefinition $definition, ?string $string): false|string
+    protected function useCustomFunctions(FunctionDefinition $definition, ?string $string): false|string
     {
-        $manipulator = Config::array('weave.string_manipulators', [])[$definition->function] ?? null;
+        $function = Config::array('weave.string_functions', [])[$definition->function] ?? null;
 
-        if ($manipulator === null) {
+        if ($function === null) {
             return false;
         }
 
-        if (! is_a($manipulator, StringManipulator::class, true)) {
+        if (! is_a($function, StringFunction::class, true)) {
             return false;
         }
 
-        return $manipulator::handle($definition, $string);
+        return $function::handle($definition, $string);
     }
 }

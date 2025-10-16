@@ -17,18 +17,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Custom String Manipulators
+    | Custom String Functions
     |--------------------------------------------------------------------------
     |
-    | This array of custom string manipulators will be checked first before
-    | looking into the list of built-in manipulators, that means you can
-    | override existing functionalities too. Or just provide your own.
+    | This array of custom string functions will be checked first before
+    | looking into the list of built-in functions, that means you can
+    | override existing behaviours too. Or just register your own.
     |
     */
 
-    'string_manipulators' => [
-        'now' => \PrinceJohn\Weave\Manipulators\NowString::class,
-        'config' => \PrinceJohn\Weave\Manipulators\ConfigString::class,
+    'string_functions' => [
+        'now' => \PrinceJohn\Weave\Functions\NowString::class,
+        'config' => \PrinceJohn\Weave\Functions\ConfigString::class,
     ],
 
 ];

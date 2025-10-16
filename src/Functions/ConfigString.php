@@ -1,12 +1,12 @@
 <?php
 
-namespace PrinceJohn\Weave\Manipulators;
+namespace PrinceJohn\Weave\Functions;
 
 use Illuminate\Support\Facades\Config;
-use PrinceJohn\Weave\Contracts\StringManipulator;
+use PrinceJohn\Weave\Contracts\StringFunction;
 use PrinceJohn\Weave\FunctionDefinition;
 
-class ConfigString implements StringManipulator
+class ConfigString implements StringFunction
 {
     public static function handle(FunctionDefinition $definition, ?string $string): string
     {
