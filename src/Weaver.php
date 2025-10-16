@@ -43,14 +43,31 @@ class Weaver
 
         $string = $this->variablesArrayIsList
             ? $this->getVariable($index)
-            : (is_null($key) ? null : $this->getVariable($key));
+            : (is_none($key) ? $key : $this->getVariable($key));
 
-        return resolve(Contracts\StringResolver::class)->handle($parser, $string);
+        return resolve(Contracts\StringResolver::class)->handle($parser, $string ?? '');
     }
 
     protected function getVariable(string|int $key): ?string
     {
         return $this->variables[$key] ?? null;
+    }
+
+    public function getTokenCount(): int
+    {
+        return $this->tokenCount;
+    }
+
+    /** @return string[] */
+    public function getPlaceholders(): array
+    {
+        return $this->placeholders;
+    }
+
+    /** @return string[] */
+    public function getTokens(): array
+    {
+        return $this->tokens;
     }
 
     public function weave(): string

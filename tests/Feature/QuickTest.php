@@ -14,7 +14,8 @@ it('can parse a token', function () {
 });
 
 it('works', function () {
-    $string = weave('{{:config}}', ['weave.token_regex']);
+    $string = weave('{{ controller:append,Controller|studly }} {{magic}}', ['User']);
 
+    dd($string);
     expect($string)->toBe(config('weave.token_regex'));
 });

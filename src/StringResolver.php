@@ -5,11 +5,12 @@ namespace PrinceJohn\Weave;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use PrinceJohn\Weave\Contracts\StringFunction;
+use PrinceJohn\Weave\Exceptions\NoneException;
 use PrinceJohn\Weave\Exceptions\UnsupportedStringFunctionException;
 
 class StringResolver implements Contracts\StringResolver
 {
-    public function handle(TokenParser $parser, ?string $string = null): ?string
+    public function handle(TokenParser $parser, None|string $string): ?string
     {
         foreach ($parser->getFunctionDefinitionList() as $definition) {
             $string = $this->resolveString($definition, $string);
@@ -18,7 +19,7 @@ class StringResolver implements Contracts\StringResolver
         return $string;
     }
 
-    protected function resolveString(FunctionDefinition $definition, ?string $string): string
+    protected function resolveString(FunctionDefinition $definition, None|string $string): string
     {
         $resolvedString = $this->useCustomFunctions($definition, $string);
 
@@ -26,97 +27,97 @@ class StringResolver implements Contracts\StringResolver
             return $resolvedString;
         }
 
+        $subject = (fn () => ! is_none($string) ? $string : throw new NoneException);
+        $first = (fn (): string => $definition->firstParameterOrFail());
         $params = $definition->parameters;
-        $first = $definition->firstParameterOrFail();
-        $stringAndParams = array_merge([$string], $params);
 
         return match ($definition->function) {
-            'after' => Str::of($string)->after($first),
-            'after_last' => Str::of($string)->afterLast($first),
-            'apa', => Str::apa($string),
-            'append' => Str::of($string)->append(...$params),
-            'ascii' => Str::ascii(...$stringAndParams),
-            'basename' => basename(...$stringAndParams),
-            'before' => Str::of($string)->before($first),
-            'before_last' => Str::of($string)->beforeLast($first),
-            'between' => Str::of($string)->between(...$params),
-            'between_first' => Str::of($string)->betweenFirst(...$params),
-            'camel' => Str::camel($string),
-            'char_at' => (string) Str::of($string)->charAt($first),
-            'chop_start' => Str::of($string)->chopStart($first),
-            'chop_end' => Str::of($string)->chopEnd($first),
-            'class_basename' => class_basename($string),
-            'decrypt' => Str::of($string)->decrypt($definition->firstParameterOrFail('1')),
-            'deduplicate' => Str::deduplicate(...$stringAndParams),
-            'dirname' => dirname(...$stringAndParams),
-            'e' => e(...$stringAndParams),
-            'encrypt' => encrypt(...$stringAndParams),
-            'finish' => Str::of($string)->finish($first),
-            'from_base64' => (string) Str::fromBase64(...$stringAndParams),
-            'hash' => Str::of($string)->hash($first),
-            'headline' => Str::headline($string),
-            'inline_markdown' => Str::inlineMarkdown($string),
-            'kebab' => Str::kebab($string),
-            'lcfirst' => Str::lcfirst($string),
-            'length' => (string) Str::length(...$stringAndParams),
-            'limit' => Str::limit(...$stringAndParams),
-            'lower' => Str::lower($string),
-            'markdown' => Str::markdown($string),
-            'mask' => Str::of($string)->mask(...$params),
-            'match' => Str::of($string)->match($first),
-            'newline' => Str::of($string)->newLine($definition->firstParameter(1)),
+            'after' => Str::of($subject())->after($first()),
+            'after_last' => Str::of($subject())->afterLast($first()),
+            'apa', => Str::apa($subject()),
+            'append' => Str::of($subject())->append(...$params),
+            'ascii' => Str::ascii($subject(), ...$params),
+            'basename' => basename($subject(), ...$params),
+            'before' => Str::of($subject())->before($first()),
+            'before_last' => Str::of($subject())->beforeLast($first()),
+            'between' => Str::of($subject())->between(...$params),
+            'between_first' => Str::of($subject())->betweenFirst(...$params),
+            'camel' => Str::camel($subject()),
+            'char_at' => (string) Str::of($subject())->charAt($first()),
+            'chop_start' => Str::of($subject())->chopStart($first()),
+            'chop_end' => Str::of($subject())->chopEnd($first()),
+            'class_basename' => class_basename($subject()),
+            'decrypt' => Str::of($subject())->decrypt($definition->firstParameterOrFail('1')),
+            'deduplicate' => Str::deduplicate($subject(), ...$params),
+            'dirname' => dirname($subject(), ...$params),
+            'e' => e($subject(), ...$params),
+            'encrypt' => encrypt($subject(), ...$params),
+            'finish' => Str::of($subject())->finish($first()),
+            'from_base64' => (string) Str::fromBase64($subject(), ...$params),
+            'hash' => Str::of($subject())->hash($first()),
+            'headline' => Str::headline($subject()),
+            'inline_markdown' => Str::inlineMarkdown($subject()),
+            'kebab' => Str::kebab($subject()),
+            'lcfirst' => Str::lcfirst($subject()),
+            'length' => (string) Str::length($subject(), ...$params),
+            'limit' => Str::limit($subject(), ...$params),
+            'lower' => Str::lower($subject()),
+            'markdown' => Str::markdown($subject()),
+            'mask' => Str::of($subject())->mask(...$params),
+            'match' => Str::of($subject())->match($first()),
+            'newline' => Str::of($subject())->newLine($definition->firstParameter(1)),
             'ordered_uuid' => (string) Str::orderedUuid(),
-            'pad_both' => Str::of($string)->padBoth(...$params),
-            'pad_left' => Str::of($string)->padLeft(...$params),
-            'pad_right' => Str::of($string)->padRight(...$params),
-            'pipe' => Str::of($string)->pipe($first),
+            'pad_both' => Str::of($subject())->padBoth(...$params),
+            'pad_left' => Str::of($subject())->padLeft(...$params),
+            'pad_right' => Str::of($subject())->padRight(...$params),
+            'pipe' => Str::of($subject())->pipe($first()),
             'password' => Str::password(...$params),
-            'plural' => Str::plural(...$stringAndParams),
-            'plural_studly' => Str::pluralStudly(...$stringAndParams),
-            'position' => (string) Str::position(...$stringAndParams),
-            'prepend' => Str::of($string)->prepend(...$params),
+            'plural' => Str::plural($subject(), ...$params),
+            'plural_studly' => Str::pluralStudly($subject(), ...$params),
+            'position' => (string) Str::position($subject(), ...$params),
+            'prepend' => Str::of($subject())->prepend(...$params),
             'random' => Str::random(...$params),
-            'remove' => Str::of($string)->remove(...$params),
-            'repeat' => Str::of($string)->repeat($first),
-            'replace' => Str::of($string)->replace(...$params),
-            'replace_first' => Str::of($string)->replaceFirst(...$params),
-            'replace_last' => Str::of($string)->replaceLast(...$params),
-            'replace_matches' => Str::of($string)->replaceMatches(...$params),
-            'replace_start' => Str::of($string)->replaceStart(...$params),
-            'replace_end' => Str::of($string)->replaceEnd(...$params),
-            'reverse' => Str::reverse($string),
-            'singular' => Str::singular($string),
-            'slug' => Str::slug(...$stringAndParams),
-            'snake' => Str::snake(...$stringAndParams),
-            'squish' => Str::squish($string),
-            'start' => Str::of($string)->start($first),
-            'strip_tags' => strip_tags(...$stringAndParams),
-            'studly' => Str::studly($string),
-            'substr' => Str::of($string)->substr(...$params),
-            'substr_count' => (string) Str::of($string)->substrCount(...$params),
-            'substr_replace' => Str::of($string)->substrReplace(...$params),
-            'take' => Str::of($string)->take($first),
-            'title' => Str::title($string),
-            'to_base64' => base64_encode($string),
-            'transliterate' => Str::transliterate(...$stringAndParams),
-            'trim' => Str::trim(...$stringAndParams),
-            'ltrim' => Str::ltrim(...$stringAndParams),
-            'rtrim' => Str::rtrim(...$stringAndParams),
-            'ucfirst' => Str::ucfirst($string),
-            'upper' => Str::upper($string),
+            'remove' => Str::of($subject())->remove(...$params),
+            'repeat' => Str::of($subject())->repeat($first()),
+            'replace' => Str::of($subject())->replace(...$params),
+            'replace_first' => Str::of($subject())->replaceFirst(...$params),
+            'replace_last' => Str::of($subject())->replaceLast(...$params),
+            'replace_matches' => Str::of($subject())->replaceMatches(...$params),
+            'replace_start' => Str::of($subject())->replaceStart(...$params),
+            'replace_end' => Str::of($subject())->replaceEnd(...$params),
+            'reverse' => Str::reverse($subject()),
+            'singular' => Str::singular($subject()),
+            'slug' => Str::slug($subject(), ...$params),
+            'snake' => Str::snake($subject(), ...$params),
+            'squish' => Str::squish($subject()),
+            'start' => Str::of($subject())->start($first()),
+            'strip_tags' => strip_tags($subject(), ...$params),
+            'studly' => Str::studly($subject()),
+            'substr' => Str::of($subject())->substr(...$params),
+            'substr_count' => (string) Str::of($subject())->substrCount(...$params),
+            'substr_replace' => Str::of($subject())->substrReplace(...$params),
+            'take' => Str::of($subject())->take($first()),
+            'title' => Str::title($subject()),
+            'to_base64' => base64_encode($subject()),
+            'transliterate' => Str::transliterate($subject(), ...$params),
+            'trim' => Str::trim($subject(), ...$params),
+            'ltrim' => Str::ltrim($subject(), ...$params),
+            'rtrim' => Str::rtrim($subject(), ...$params),
+            'ucfirst' => Str::ucfirst($subject()),
+            'upper' => Str::upper($subject()),
             'ulid' => (string) Str::ulid(),
-            'unwrap' => Str::of($string)->unwrap(...$params),
+            'unwrap' => Str::of($subject())->unwrap(...$params),
             'uuid' => (string) Str::uuid(),
             'uuid7' => (string) Str::uuid7(),
-            'word_count' => Str::wordCount(...$stringAndParams),
-            'word_wrap' => Str::wordWrap(...$stringAndParams),
-            'words' => Str::words(...$stringAndParams),
-            'wrap' => Str::of($string)->wrap(...$params),
+            'word_count' => Str::wordCount($subject(), ...$params),
+            'word_wrap' => Str::wordWrap($subject(), ...$params),
+            'words' => Str::words($subject(), ...$params),
+            'wrap' => Str::of($subject())->wrap(...$params),
             default => throw new UnsupportedStringFunctionException($definition->function),
         };
     }
 
-    protected function useCustomFunctions(FunctionDefinition $definition, ?string $string): false|string
+    protected function useCustomFunctions(FunctionDefinition $definition, None|string $string): false|string
     {
         $function = Config::array('weave.string_functions', [])[$definition->function] ?? null;
 

@@ -4,4 +4,4 @@ namespace PrinceJohn\Weave\Exceptions;
 
 use Exception;
 
-class ParameterDoesNotExistException extends Exception {}
+final class ParameterDoesNotExistException extends Exception {}

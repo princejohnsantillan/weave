@@ -4,4 +4,4 @@ namespace PrinceJohn\Weave\Exceptions;
 
 use Exception;
 
-final class TokenMatchingFailedException extends Exception {}
+final class NoneException extends Exception {}
