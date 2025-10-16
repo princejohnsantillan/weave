@@ -11,6 +11,8 @@ composer require princejohnsantillan/weave
 
 ## Usage
 ```php
+use function PrinceJohn\Weave\weave;
+
 /**
  *  Swap tokens with values from an array list.
  *  Index positioning should be observed here. 
@@ -81,6 +83,8 @@ return [
 
 3. Now use it!
 ```php
+use function PrinceJohn\Weave\weave;
+
 weave("This is {{:emojify}} and {{:emojify}}!", [":fire:",":cool:"]); // This is 🔥and 😎!
 ```
 
