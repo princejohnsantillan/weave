@@ -5,9 +5,17 @@
 An elegant and easy way to format strings and stubs.
 
 ## Installation
+
+1. Require the package.
 ```php
 composer require princejohnsantillan/weave
 ```
+
+2. Publish the config.
+```php
+php artisan vendor:publish --provider="PrinceJohn\Weave\WeaveServiceProvider"
+```
+
 
 ## Usage
 ```php
