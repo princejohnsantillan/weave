@@ -1,3 +1,6 @@
+![Weave](https://github.com/user-attachments/assets/6a7d7f71-3921-48b3-bf25-afb03e0fa430)
+
+
 # Weave
 
 An easy and elegant way to interpolate and stub strings.
