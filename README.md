@@ -12,7 +12,7 @@ composer require princejohnsantillan/weave
 ## Usage
 ```php
 /**
- *  Swap tokens with values from the array list.
+ *  Swap tokens with values from an array list.
  *  Index positioning should be observed here. 
  */
 weave('Hi {{name}}! Your role is: {{role}}', ['Prince', 'magician']); // Hi Prince! Your role is: magician 
@@ -21,12 +21,15 @@ weave('Hi {{name}}! Your role is: {{role}}', ['Prince', 'magician']); // Hi Prin
  *  Swap tokens with values from an associative array.
  *  Array keys here should correspond to the token names. 
  */
-weave('Hi {{name}}! Your role is: {{role}}', ['name' => 'John', 'developer']); // Hi John! Your role is: developer
+weave('Hi {{name}}! Your role is: {{role}}', [
+    'name' => 'John', 
+    'role' => 'developer'
+]); // Hi John! Your role is: developer
 
 /**
  * Generate strings like the datetime now. 
  */
-weave("Today is {{:now,Y-m-d}}!"); // Today is 2025-10-14!
+weave("Today is {{:now,Y-m-d}}!"); // Today is 2025-10-16!
 
 /**
  * Compound string transformations.
@@ -36,7 +39,7 @@ weave("{{title:kebab|upper}}", ["this is a breaking news"]); // THIS-IS-A-BREAKI
 /**
  * Provide string transformations with a parameter.
  */
-weave("{{controller:append,Controller|studly}}", ["controller" => "User"]); // UserController
+weave("{{controller:append,Controller|studly}}", ["controller" => "user"]); // UserController
 ```
 
 ## Custom Functions
