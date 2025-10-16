@@ -21,9 +21,9 @@ it('leaves tokens that cannot be matched by a list', function () {
 });
 
 it('leaves tokens that cannot be matched by an associative array', function () {
-    $string = weave('{{ name }} {{ email }}', ['email' => 'prince@weave.repo']);
+    $string = weave('{{ name:ucfirst|prepend,Mr., }} {{ email }}', ['email' => 'prince@weave.repo']);
 
-    expect($string)->toBe('{{ name }} prince@weave.repo');
+    expect($string)->toBe('{{ name:ucfirst|prepend,Mr., }} prince@weave.repo');
 });
 
 it('can transform a token', function () {
@@ -36,4 +36,10 @@ it('can compound multiple transformations on a token', function () {
     $string = weave('{{ name:slug|upper }}', ['prince john']);
 
     expect($string)->toBe('PRINCE-JOHN');
+});
+
+it('tokens can use the same variable', function () {
+    $string = weave('{{ name:upper }} {{ name:slug }}', ['name' => 'prince john']);
+
+    expect($string)->toBe('PRINCE JOHN prince-john');
 });
