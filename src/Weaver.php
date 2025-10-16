@@ -35,7 +35,7 @@ class Weaver
         [$this->placeholders, $this->tokens] = $matches;
     }
 
-    protected function resolveString(int $index, string $token): ?string
+    protected function resolveString(int $index, string $token): false|string
     {
         $parser = new TokenParser($token);
 
@@ -45,12 +45,12 @@ class Weaver
             ? $this->getVariable($index)
             : (is_none($key) ? $key : $this->getVariable($key));
 
-        return resolve(Contracts\StringResolver::class)->handle($parser, $string ?? '');
+        return resolve(Contracts\StringResolver::class)->handle($parser, $string);
     }
 
-    protected function getVariable(string|int $key): ?string
+    protected function getVariable(string|int $key): None|string
     {
-        return $this->variables[$key] ?? null;
+        return $this->variables[$key] ?? new None;
     }
 
     public function getTokenCount(): int
@@ -77,7 +77,7 @@ class Weaver
         foreach ($this->tokens as $i => $token) {
             $resolvedString = $this->resolveString($i, $token);
 
-            if ($resolvedString === null) {
+            if ($resolvedString === false) {
                 continue;
             }
 

@@ -7,5 +7,5 @@ use PrinceJohn\Weave\TokenParser;
 
 interface StringResolver
 {
-    public function handle(TokenParser $parser, None|string $string): ?string;
+    public function handle(TokenParser $parser, None|string $string): false|string;
 }
