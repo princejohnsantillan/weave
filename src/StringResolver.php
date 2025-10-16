@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use PrinceJohn\Weave\Contracts\StringFunction;
 use PrinceJohn\Weave\Exceptions\NoneException;
+use PrinceJohn\Weave\Exceptions\UnsupportedStringFunctionException;
 
 class StringResolver implements Contracts\StringResolver
 {
@@ -34,7 +35,6 @@ class StringResolver implements Contracts\StringResolver
         $first = (fn (): string => $definition->firstParameterOrFail());
         $params = $definition->parameters;
 
-        dump($string);
         try {
             $resolvedString = match ($definition->function) {
                 'after' => Str::of($subject())->after($first()),
@@ -118,7 +118,7 @@ class StringResolver implements Contracts\StringResolver
                 'word_wrap' => Str::wordWrap($subject(), ...$params),
                 'words' => Str::words($subject(), ...$params),
                 'wrap' => Str::of($subject())->wrap(...$params),
-                default => false
+                default => throw new UnsupportedStringFunctionException($definition->function)
             };
         } catch (NoneException) {
             $resolvedString = false;
