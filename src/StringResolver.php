@@ -107,7 +107,7 @@ class StringResolver implements Contracts\StringResolver
             'ucfirst' => Str::ucfirst($string),
             'upper' => Str::upper($string),
             'ulid' => (string) Str::ulid(),
-            'unwrap' => Str::of($string)->unwrap($params),
+            'unwrap' => Str::of($string)->unwrap(...$params),
             'uuid' => (string) Str::uuid(),
             'uuid7' => (string) Str::uuid7(),
             'word_count' => Str::wordCount(...$stringAndParams),
