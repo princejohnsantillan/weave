@@ -52,17 +52,12 @@ the `\PrinceJohn\Weave\Contracts\StringFunction` interface and register it on th
 ```php
 use Illuminate\Support\Str;
 use PrinceJohn\Weave\Contracts\StringFunction;
-use PrinceJohn\Weave\Exceptions\NoneException;
-
-use function PrinceJohn\Weave\is_none;
 
 class EmojifyString implements StringFunction
 {
     public static function handle(FunctionDefinition $definition, None|string $string): string
     {
-        $emojis = [':cool:' => '😎', ':fire' => '🔥'];
-        
-        throw_if(is_none($string), NoneException::class);
+        $emojis = [':cool:' => '😎', ':fire' => '🔥'];        
         
         return Str::swap($emojis, $string)
     }
