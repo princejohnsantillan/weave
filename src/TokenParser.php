@@ -22,11 +22,9 @@ class TokenParser
             throw MalformedTokenException::blankToken();
         }
 
-        if (Str::substrCount($token, ':') > 1) {
-            throw MalformedTokenException::multipleColon();
-        }
-
-        $this->key = Str::of($token)->before(':')->trim()->toString();
+        $this->key = Str::contains($token, ':')
+            ? Str::of($token)->before(':')->trim()->toString()
+            : $token;
 
         if (Str::contains($token, ':')) {
             $functionsString = Str::of($token)->after(':')->trim()->toString();
@@ -37,7 +35,6 @@ class TokenParser
 
             $this->identifyFunctions($functionsString);
         }
-
     }
 
     private function identifyFunctions(string $functionsString): void
