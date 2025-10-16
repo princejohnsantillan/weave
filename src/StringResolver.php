@@ -25,17 +25,17 @@ class StringResolver implements Contracts\StringResolver
 
     protected function resolveString(FunctionDefinition $definition, None|string $string): false|string
     {
-        $resolvedString = $this->useCustomFunctions($definition, $string);
-
-        if ($resolvedString !== false) {
-            return $resolvedString;
-        }
-
-        $subject = (fn () => ! is_none($string) ? $string : throw new NoneException);
-        $first = (fn (): string => $definition->firstParameterOrFail());
-        $params = $definition->parameters;
-
         try {
+            $resolvedString = $this->useCustomFunctions($definition, $string);
+
+            if ($resolvedString !== false) {
+                return $resolvedString;
+            }
+
+            $subject = (fn () => ! is_none($string) ? $string : throw new NoneException);
+            $first = (fn (): string => $definition->firstParameterOrFail());
+            $params = $definition->parameters;
+
             $resolvedString = match ($definition->function) {
                 'after' => Str::of($subject())->after($first()),
                 'after_last' => Str::of($subject())->afterLast($first()),

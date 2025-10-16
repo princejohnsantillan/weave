@@ -11,12 +11,76 @@ composer require princejohnsantillan/weave
 
 ## Usage
 ```php
-weave("Hi {{name}}!", ["Prince"]); // Hi Prince!
+/**
+ *  Swap tokens with values from the array list.
+ *  Index positioning should be observed here. 
+ */
+weave('Hi {{name}}! Your role is: {{role}}', ['Prince', 'magician']); // Hi Prince! Your role is: magician 
 
+/**
+ *  Swap tokens with values from an associative array.
+ *  Array keys here should correspond to the token names. 
+ */
+weave('Hi {{name}}! Your role is: {{role}}', ['name' => 'John', 'developer']); // Hi John! Your role is: developer
+
+/**
+ * Generate strings like the datetime now. 
+ */
 weave("Today is {{:now,Y-m-d}}!"); // Today is 2025-10-14!
 
-weave("{{title:headline}}", ["this is a breaking news"]) //This Is A Breaking News
+/**
+ * Compound string transformations.
+ */
+weave("{{title:kebab|upper}}", ["this is a breaking news"]); // THIS-IS-A-BREAKING-NEWS
+
+/**
+ * Provide string transformations with a parameter.
+ */
+weave("{{controller:append,Controller|studly}}", ["controller" => "User"]); // UserController
 ```
+
+## Custom Functions
+You can also register your own custom functions. All you need to do is create a class that implements
+the `\PrinceJohn\Weave\Contracts\StringFunction` interface and register it on the config.
+
+1. Create the `String Function`.
+```php
+use Illuminate\Support\Str;
+use PrinceJohn\Weave\Contracts\StringFunction;
+use PrinceJohn\Weave\Exceptions\NoneException;
+
+use function PrinceJohn\Weave\is_none;
+
+class EmojifyString implements StringFunction
+{
+    public static function handle(FunctionDefinition $definition, None|string $string): string
+    {
+        $emojis = [':cool:' => '😎', ':fire' => '🔥'];
+        
+        throw_if(is_none($string), NoneException::class);
+        
+        return Str::swap($emojis, $string)
+    }
+}
+```
+
+2. Register it on the weave config file.
+```php
+
+return [
+    'string_functions' => [
+        'now' => \PrinceJohn\Weave\Functions\NowString::class,
+        'config' => \PrinceJohn\Weave\Functions\ConfigString::class,
+        'emojify' => EmojifyString::class
+    ],
+]
+```
+
+3. Now use it!
+```php
+weave("This is {{:emojify}} and {{:emojify}}!", [":fire:",":cool:"]); // This is 🔥and 😎!
+```
+
 
 ## Available Functions
 
