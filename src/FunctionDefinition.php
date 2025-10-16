@@ -27,7 +27,7 @@ readonly class FunctionDefinition
         $parameter = $this->getParameter($index, $default);
 
         if (is_null($parameter)) {
-            throw new ParameterDoesNotExistException;
+            throw ParameterDoesNotExistException::onIndex($index);
         }
 
         return $parameter;

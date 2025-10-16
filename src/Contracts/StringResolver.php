@@ -2,9 +2,10 @@
 
 namespace PrinceJohn\Weave\Contracts;
 
+use PrinceJohn\Weave\None;
 use PrinceJohn\Weave\TokenParser;
 
 interface StringResolver
 {
-    public function handle(TokenParser $parser, ?string $string = null): ?string;
+    public function handle(TokenParser $parser, None|string $string): false|string;
 }
