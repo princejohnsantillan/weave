@@ -7,8 +7,6 @@ use Illuminate\Support\Str;
 use PrinceJohn\Weave\Contracts\StringManipulator;
 use PrinceJohn\Weave\Exceptions\UnsupportedStringFunctionException;
 
-use function Safe\base64_decode;
-
 class StringResolver implements Contracts\StringResolver
 {
     public function handle(TokenParser $parser, ?string $string = null): ?string
@@ -29,7 +27,7 @@ class StringResolver implements Contracts\StringResolver
         }
 
         $params = $definition->parameters;
-        $first = $definition->firstParameter();
+        $first = $definition->firstParameterOrFail();
         $stringAndParams = array_merge([$string], $params);
 
         return match ($definition->function) {
@@ -41,26 +39,26 @@ class StringResolver implements Contracts\StringResolver
             'basename' => basename(...$stringAndParams),
             'before' => Str::of($string)->before($first),
             'before_last' => Str::of($string)->beforeLast($first),
-            'between' => Str::of($string)->between(...$definition->getParameters([0, 1])),
-            'between_first' => Str::of($string)->betweenFirst(...$definition->getParameters([0, 1])),
+            'between' => Str::of($string)->between(...$params),
+            'between_first' => Str::of($string)->betweenFirst(...$params),
             'camel' => Str::camel($string),
-            'char_at' => Str::of($string)->charAt($first),
+            'char_at' => (string) Str::of($string)->charAt($first),
             'chop_start' => Str::of($string)->chopStart($first),
             'chop_end' => Str::of($string)->chopEnd($first),
             'class_basename' => class_basename($string),
-            'decrypt' => decrypt(...$stringAndParams),
+            'decrypt' => Str::of($string)->decrypt($definition->firstParameterOrFail('1')),
             'deduplicate' => Str::deduplicate(...$stringAndParams),
             'dirname' => dirname(...$stringAndParams),
             'e' => e(...$stringAndParams),
             'encrypt' => encrypt(...$stringAndParams),
             'finish' => Str::of($string)->finish($first),
-            'from_base64' => base64_decode(...$stringAndParams),
+            'from_base64' => (string) Str::fromBase64(...$stringAndParams),
             'hash' => Str::of($string)->hash($first),
             'headline' => Str::headline($string),
             'inline_markdown' => Str::inlineMarkdown($string),
             'kebab' => Str::kebab($string),
             'lcfirst' => Str::lcfirst($string),
-            'length' => Str::length(...$stringAndParams),
+            'length' => (string) Str::length(...$stringAndParams),
             'limit' => Str::limit(...$stringAndParams),
             'lower' => Str::lower($string),
             'markdown' => Str::markdown($string),
@@ -95,7 +93,7 @@ class StringResolver implements Contracts\StringResolver
             'strip_tags' => strip_tags(...$stringAndParams),
             'studly' => Str::studly($string),
             'substr' => Str::of($string)->substr(...$params),
-            'substr_count' => Str::of($string)->substrCount(...$params),
+            'substr_count' => (string) Str::of($string)->substrCount(...$params),
             'substr_replace' => Str::of($string)->substrReplace(...$params),
             'take' => Str::of($string)->take($first),
             'title' => Str::title($string),
