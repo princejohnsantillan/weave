@@ -11,8 +11,10 @@ composer require princejohnsantillan/weave
 
 ## Usage
 ```php
+use function PrinceJohn\Weave\weave;
+
 /**
- *  Swap tokens with values from the array list.
+ *  Swap tokens with values from an array list.
  *  Index positioning should be observed here. 
  */
 weave('Hi {{name}}! Your role is: {{role}}', ['Prince', 'magician']); // Hi Prince! Your role is: magician 
@@ -21,12 +23,15 @@ weave('Hi {{name}}! Your role is: {{role}}', ['Prince', 'magician']); // Hi Prin
  *  Swap tokens with values from an associative array.
  *  Array keys here should correspond to the token names. 
  */
-weave('Hi {{name}}! Your role is: {{role}}', ['name' => 'John', 'developer']); // Hi John! Your role is: developer
+weave('Hi {{name}}! Your role is: {{role}}', [
+    'name' => 'John', 
+    'role' => 'developer'
+]); // Hi John! Your role is: developer
 
 /**
  * Generate strings like the datetime now. 
  */
-weave("Today is {{:now,Y-m-d}}!"); // Today is 2025-10-14!
+weave("Today is {{:now,Y-m-d}}!"); // Today is 2025-10-16!
 
 /**
  * Compound string transformations.
@@ -36,7 +41,7 @@ weave("{{title:kebab|upper}}", ["this is a breaking news"]); // THIS-IS-A-BREAKI
 /**
  * Provide string transformations with a parameter.
  */
-weave("{{controller:append,Controller|studly}}", ["controller" => "User"]); // UserController
+weave("{{controller:append,Controller|studly}}", ["controller" => "user"]); // UserController
 ```
 
 ## Custom Functions
@@ -47,17 +52,12 @@ the `\PrinceJohn\Weave\Contracts\StringFunction` interface and register it on th
 ```php
 use Illuminate\Support\Str;
 use PrinceJohn\Weave\Contracts\StringFunction;
-use PrinceJohn\Weave\Exceptions\NoneException;
-
-use function PrinceJohn\Weave\is_none;
 
 class EmojifyString implements StringFunction
 {
     public static function handle(FunctionDefinition $definition, None|string $string): string
     {
-        $emojis = [':cool:' => '😎', ':fire' => '🔥'];
-        
-        throw_if(is_none($string), NoneException::class);
+        $emojis = [':cool:' => '😎', ':fire' => '🔥'];        
         
         return Str::swap($emojis, $string)
     }
@@ -78,6 +78,8 @@ return [
 
 3. Now use it!
 ```php
+use function PrinceJohn\Weave\weave;
+
 weave("This is {{:emojify}} and {{:emojify}}!", [":fire:",":cool:"]); // This is 🔥and 😎!
 ```
 
