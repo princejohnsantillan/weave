@@ -19,8 +19,15 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         php: [8.4, 8.3, 8.2]
+        laravel: [12.*, 11.*]
+        stability: [ prefer-lowest, prefer-stable ]
+        include:
+          - laravel: 12.*
+            testbench: 10.*
+          - laravel: 11.*
+            testbench: 9.*
 
-    name: QA - ${{ matrix.os }} - ${{ matrix.php }}
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
     steps:
       - name: Checkout code
