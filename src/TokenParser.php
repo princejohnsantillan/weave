@@ -39,6 +39,19 @@ class TokenParser
 
     private function identifyFunctions(string $functionsString): void
     {
+        /**
+         * This is to allow for escaping "|" and ","
+         * since they are special characters to the parser.
+         */
+        $mark = [
+            "\|" => uniqid('PIPE:'),
+            "\," => uniqid('COMMA:'),
+        ];
+
+        $unmark = array_flip($mark);
+
+        $functionsString = Str::swap($mark, $functionsString);
+
         $functions = explode('|', $functionsString);
 
         if (blank($functions)) {
@@ -49,6 +62,12 @@ class TokenParser
             $parameters = explode(',', $function);
 
             $method = array_shift($parameters);
+
+            $method = Str::swap($unmark, $method);
+
+            array_walk($parameters, function (&$parameter) use ($unmark) {
+                $parameter = Str::swap($unmark, $parameter);
+            });
 
             $this->functionDefinitionList[] = new FunctionDefinition($method, $parameters);
         }
