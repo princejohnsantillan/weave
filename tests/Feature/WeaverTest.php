@@ -26,4 +26,14 @@ it('leaves tokens that cannot be matched by an associative array', function () {
     expect($string)->toBe('{{ name }} prince@weave.repo');
 });
 
-it('can transform a token', function () {});
+it('can transform a token', function () {
+    $string = weave('{{ name:upper }}', ['name' => 'prince john']);
+
+    expect($string)->toBe('PRINCE JOHN');
+});
+
+it('can compound multiple transformations on a token', function () {
+    $string = weave('{{ name:slug|upper }}', ['prince john']);
+
+    expect($string)->toBe('PRINCE-JOHN');
+});

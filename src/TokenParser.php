@@ -22,9 +22,15 @@ class TokenParser
             throw MalformedTokenException::blankToken();
         }
 
-        $this->key = Str::contains($token, ':')
-            ? Str::of($token)->before(':')->trim()->toString()
-            : $token;
+        if (Str::contains($token, ':')) {
+            $key = Str::of($token)->before(':')->trim()->toString();
+
+            if (filled($key)) {
+                $this->key = $key;
+            }
+        } else {
+            $this->key = $token;
+        }
 
         if (Str::contains($token, ':')) {
             $functionsString = Str::of($token)->after(':')->trim()->toString();
@@ -43,12 +49,18 @@ class TokenParser
          * This is to allow for escaping "|" and ","
          * since they are special characters to the parser.
          */
+        $pipeId = uniqid('PIPE:');
+        $commaId = uniqid('COMMA:');
+
         $mark = [
-            "\|" => uniqid('PIPE:'),
-            "\," => uniqid('COMMA:'),
+            "\|" => $pipeId,
+            "\," => $commaId,
         ];
 
-        $unmark = array_flip($mark);
+        $unmark = [
+            $pipeId => '|',
+            $commaId => ',',
+        ];
 
         $functionsString = Str::swap($mark, $functionsString);
 
