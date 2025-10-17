@@ -41,24 +41,31 @@ weave('Hi {{name}}! Your role is: {{role}}', [
 ]); // Hi John! Your role is: developer
 
 /**
+ *  Reuse an input value in the same string. 
+ */
+weave('I am big: {{name|upper}}! I am small: {{name|lower}}.', [
+    'name' => 'JoHn',     
+]); // I am big: JOHN! I am small: john.
+
+/**
  * Transform a string.
  */
-weave('{{text:lower}}', ['AN YOU HEAR ME?'); // Can you hear me?
+weave('{{text:lower}}', ['CAN YOU HEAR ME?']); // Can you hear me?
 
 /**
  * Compound string transformations.
  */
-weave('{{title:kebab|upper}}', ['his is a breaking news'); // THIS-IS-A-BREAKING-NEWS
+weave('{{title:kebab|upper}}', ['This is a breaking news']); // THIS-IS-A-BREAKING-NEWS
 
 /**
  * Provide string transformations with a parameter.
  */
-weave('{{controller:append,Controller|studly}}', ['ontroller'=> 'ser'); // UserController
+weave('{{controller:append,Controller|studly}}', ['controller'=> 'user']); // UserController
 
 /**
  * Generate strings like the datetime now. 
  */
-weave('Today is {{:now,Y-m-d}}!'; // Today is 2025-10-16!
+weave('Today is {{:now,Y-m-d}}!'); // Today is 2025-10-16!
 ```
 
 
@@ -202,8 +209,8 @@ weave('{{:now,H:i:s}}'); // 12:45:57
 `config` allows you to pull in a string from your Laravel configs. 
 The key may be passed in as a variable or as a paramater. 
 ```php
-weave('{{:config,app.name') // Weave
-weave('{{:config', ['app.name']) // Weave
+weave('{{:config,app.name}}') // Weave
+weave('{{:config}}', ['app.name']) // Weave
 ```
 
 #### default
