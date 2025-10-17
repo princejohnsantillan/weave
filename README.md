@@ -4,8 +4,8 @@
 |PHP|8.2|8.3|8.4|
 |---|---|---|---|
 
-|Laravel|11.x| 12.x|
-|-------|----|-----|
+|Laravel|11.x|12.x|
+|-------|----|----|
 
 
 ## Installation
@@ -55,7 +55,7 @@ weave('{{text:lower}}', ['CAN YOU HEAR ME?']); // Can you hear me?
 /**
  * Compound string transformations.
  */
-weave('{{title:kebab|upper}}', ['This is a breaking news']); // THIS-IS-A-BREAKING-NEWS
+weave('{{title:kebab|upper}}', ['This is breaking news']); // THIS-IS-BREAKING-NEWS
 
 /**
  * Provide string transformations with a parameter.
@@ -71,7 +71,7 @@ weave('Today is {{:now,Y-m-d}}!'); // Today is 2025-10-16!
 
 ## Custom Functions
 You can also register your own custom functions. All you need to do is create a class that implements
-the `\PrinceJohn\Weave\Contracts\StringFunction` interface and register it on the config.
+the `\PrinceJohn\Weave\Contracts\StringFunction` interface and register it in the config.
 
 1. Create the `String Function`.
 ```php
@@ -91,7 +91,7 @@ class EmojifyString implements StringFunction
 }
 ```
 
-2. Register it on the weave config file.
+2. Register it in the weave config file.
 ```php
 
 return [
@@ -110,7 +110,7 @@ weave('This is {{:emojify}} and {{:emojify}}!', [':fire:',':cool:']); // This is
 
 ## Available Functions
 
-All of these functions are based off of Laravel's string helpers, [see here](https://laravel.com/docs/12.x/strings).
+All of these functions are based on Laravel's string helpers, [see here](https://laravel.com/docs/12.x/strings).
 
 - [after](https://laravel.com/docs/12.x/strings#method-fluent-str-after)
 - [after_last](https://laravel.com/docs/12.x/strings#method-fluent-str-after-last)
@@ -231,7 +231,7 @@ weave('{{:of,Hey|upper}}'); // HEY
 ```
 
 #### required
-By default, when the token cannot be matched or interpolated the token is left as is.
+By default, when the token cannot be matched or interpolated, the token is left as is.
 `required` allows you to change this behavior and make it throw an exception instead.
 ```php
 weave('Hi {{name:required}}!'); ‼️ RequiredStringException
