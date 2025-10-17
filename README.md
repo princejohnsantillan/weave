@@ -71,7 +71,7 @@ weave('Today is {{:now,Y-m-d}}!'); // Today is 2025-10-16!
 
 ## Custom Functions
 You can also register your own custom functions. All you need to do is create a class that implements
-the `\PrinceJohn\Weave\Contracts\StringFunction` interface and register it in the config.
+the `\PrinceJohn\Weave\Contracts\StringFunction` interface and register it in the configuration file.
 
 1. Create the `String Function`.
 ```php
@@ -198,7 +198,7 @@ All of these functions are based on Laravel's string helpers, [see here](https:/
 Weave has a few additional built-in functions apart from the functions provided by Laravel.
 
 #### config
-`config` config allows you to pull a value from your Laravel configuration. 
+`config` allows you to pull a value from your Laravel configuration. 
 The key may be passed in as a variable or as a parameter. 
 ```php
 weave('{{:config,app.name}}'); // Weave
