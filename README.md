@@ -209,8 +209,8 @@ weave('{{:config}}', ['app.name']); // Weave
 `default` allows you to provide a default value when the input variable does not provide it.
 You can also omit the parameter to remove the token when the input is missing.
 ```php
-weave('Hi {{name|default}}!'); // Hi !
-weave('Hi {{name|default,John}}!', ['title' => 'This is not the name']); // Hi John!
+weave('Hi {{name:default}}!'); // Hi !
+weave('Hi {{name:default,John}}!', ['title' => 'This is not the name']); // Hi John!
 ```
 
 #### now
@@ -234,8 +234,8 @@ weave('{{:of,Hey|upper}}'); // HEY
 By default, when the token cannot be matched or interpolated the token is left as is.
 `required` allows you to change this behavior and make it throw an exception instead.
 ```php
-weave('Hi {{name|required}}!'); ‼️ RequiredStringException
-weave('Hi {{name|required}}!', ['age' => '1']); ‼️ RequiredStringException
+weave('Hi {{name:required}}!'); ‼️ RequiredStringException
+weave('Hi {{name:required}}!', ['age' => '1']); ‼️ RequiredStringException
 ```
 
 
