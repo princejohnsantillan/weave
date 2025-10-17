@@ -197,14 +197,6 @@ All of these functions are based off of Laravel's string helpers, [see here](htt
 ## Additional Functions
 Weave has a few additional built-in functions apart from the functions provided by Laravel.
 
-#### now
-`now` generates the current datetime. This uses Laravel's `now()` method. 
-You can optionally pass in a parameter to define the format.
-```php
-weave('{{:now}}'); // 2025-10-17 12:45:57
-weave('{{:now,H:i:s}}'); // 12:45:57 
-```
-
 #### config
 `config` allows you to pull in a string from your Laravel configs. 
 The key may be passed in as a variable or as a paramater. 
@@ -219,6 +211,14 @@ You can also omit the parameter to remove the token when the input is missing.
 ```php
 weave('Hi {{name|default}}!'); // Hi !
 weave('Hi {{name|default,John}}!', ['title' => 'This is not the name']); // Hi John!
+```
+
+#### now
+`now` generates the current datetime. This uses Laravel's `now()` method.
+You can optionally pass in a parameter to define the format.
+```php
+weave('{{:now}}'); // 2025-10-17 12:45:57
+weave('{{:now,H:i:s}}'); // 12:45:57 
 ```
 
 #### required
