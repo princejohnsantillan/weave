@@ -12,12 +12,15 @@ class Weaver
 
     protected int $tokenCount;
 
+    /** @var string[] */
     protected array $placeholders;
 
+    /** @var string[] */
     protected array $tokens;
 
     public function __construct(
         protected string $subject,
+        /** @var string[]|array<string,string> $variables */
         protected array $variables = []
     ) {
         $this->variablesArrayIsList = array_is_list($this->variables);

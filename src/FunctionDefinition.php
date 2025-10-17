@@ -33,7 +33,10 @@ readonly class FunctionDefinition
         return $parameter;
     }
 
-    /** @return array<string|null> */
+    /**
+     * @param  int[]|array<int,string>  $map
+     * @return array<string|null>
+     */
     public function getParameters(array $map = []): array
     {
         if ($map === []) {
@@ -55,6 +58,9 @@ readonly class FunctionDefinition
         return $parameters;
     }
 
+    /**
+     * @return array<string|null>
+     */
     public function limitParameters(int $limit): array
     {
         $limit = max(0, $limit - 1);

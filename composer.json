@@ -53,6 +53,7 @@
         ],
         "qa": [
             "@lint",
+            "@analyse",
             "@test"
         ]
     },
