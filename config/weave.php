@@ -30,6 +30,7 @@ return [
         'config' => \PrinceJohn\Weave\Functions\ConfigString::class,
         'default' => \PrinceJohn\Weave\Functions\DefaultString::class,
         'now' => \PrinceJohn\Weave\Functions\NowString::class,
+        'of' => \PrinceJohn\Weave\Functions\OfString::class,
         'required' => \PrinceJohn\Weave\Functions\RequiredString::class,
     ],
 
