@@ -6,7 +6,7 @@ use Exception;
 
 final class ParameterDoesNotExistException extends Exception
 {
-    public const ON_INDEX = 3000;
+    public const ON_INDEX = 1020;
 
     public static function onIndex(int $index): ParameterDoesNotExistException
     {
