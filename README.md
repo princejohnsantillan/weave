@@ -26,7 +26,7 @@ php artisan vendor:publish --provider="PrinceJohn\Weave\WeaveServiceProvider"
 use function PrinceJohn\Weave\weave;
 
 /**
- *  Swap tokens with values from an array list.
+ *  Swap tokens with values from a list.
  *  Tokens and values are matched by index position. 
  */
 weave('Hi {{name}}! Your role is: {{role}}', ['Prince', 'magician']); // Hi Prince! Your role is: magician 
@@ -60,7 +60,7 @@ weave('{{title:kebab|upper}}', ['This is breaking news']); // THIS-IS-BREAKING-N
 /**
  * Provide string transformations with a parameter.
  */
-weave('{{controller:append,Controller|studly}}', ['controller'=> 'user']); // UserController
+weave('{{controller:append,Controller|studly}}', ['controller' => 'user']); // UserController
 
 /**
  * Generate the current datetime string.
@@ -105,7 +105,7 @@ return [
 ```php
 use function PrinceJohn\Weave\weave;
 
-weave('This is {{:emojify}} and {{:emojify}}!', [':fire:',':cool:']); // This is 🔥 and 😎!
+weave('This is {{:emojify}} and {{:emojify}}!', [':fire:', ':cool:']); // This is 🔥 and 😎!
 ```
 
 ## Available Functions
@@ -225,7 +225,7 @@ weave('{{:now,H:i:s}}'); // 12:45:57
 `of` generates a string based on the given parameter. 
 It generates an empty string if no parameter is provided.
 ```php
-weave('{{:of}}',["passthrough"]); // passthrough 
+weave('{{:of}}', ['passthrough']); // passthrough 
 weave('{{:of}}'); // ""
 weave('{{:of,Hey|upper}}'); // HEY 
 ```
