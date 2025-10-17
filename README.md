@@ -221,6 +221,15 @@ weave('{{:now}}'); // 2025-10-17 12:45:57
 weave('{{:now,H:i:s}}'); // 12:45:57 
 ```
 
+#### of
+`of` generates a string based of given parameter. 
+It generates an empty string  if no parameter is provider.
+```php
+weave('{{:of}}',["passthrough"]); // passthrough 
+weave('{{:of}}'); // ""
+weave('{{:of,Hey|upper}}'); // HEY 
+```
+
 #### required
 By default, when the token cannot be matched or interpolated the token is left as is.
 `required` allows you to change this behavior and make it throw an exception instead.
