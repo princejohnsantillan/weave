@@ -1,5 +1,7 @@
 <?php
 
+use PrinceJohn\Weave\Weaver;
+
 use function PrinceJohn\Weave\weave;
 
 it('swaps using a list', function () {
@@ -42,4 +44,22 @@ it('tokens can use the same variable', function () {
     $string = weave('{{ name:upper }} {{ name:slug }}', ['name' => 'prince john']);
 
     expect($string)->toBe('PRINCE JOHN prince-john');
+});
+
+it('can count the tokens', function () {
+    $weaver = new Weaver('{{token1}} {{token2}} {{token3}}');
+
+    expect($weaver->getTokenCount())->toBe(3);
+});
+
+it('can get the tokens', function () {
+    $weaver = new Weaver('{{token1}} {{token2:func}} {{token3:func,param|func}}');
+
+    expect($weaver->getTokens())->toBe(['token1', 'token2:func', 'token3:func,param|func']);
+});
+
+it('can get the placeholders', function () {
+    $weaver = new Weaver('{{token1}} {{token2:func}} {{token3:func,param|func}}');
+
+    expect($weaver->getPlaceholders())->toBe(['{{token1}}', '{{token2:func}}', '{{token3:func,param|func}}']);
 });

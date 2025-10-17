@@ -70,3 +70,12 @@ it('can fail if the first parameter is does not exists', function () {
     expect($definition->firstParameterOrFail('myfirst'))->toBe('myfirst');
     $definition->firstParameterOrFail();
 })->throws(exception: ParameterDoesNotExistException::class, exceptionCode: ParameterDoesNotExistException::ON_INDEX);
+
+it('can limit the parameters', function () {
+    $definition = new FunctionDefinition('myfunc:index', ['param1', 'param2', 'param3']);
+
+    $limited = $definition->limitParameters(2);
+
+    expect($limited)->toHaveCount(2);
+    expect($limited)->toBe(['param1', 'param2']);
+});

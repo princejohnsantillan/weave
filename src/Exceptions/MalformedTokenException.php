@@ -8,7 +8,7 @@ final class MalformedTokenException extends Exception
 {
     public const BLANK_TOKEN = 1000;
 
-    public const BLANK_FUNCTION = 1001;
+    public const BLANK_FUNCTION = 1010;
 
     public static function blankToken(): MalformedTokenException
     {
