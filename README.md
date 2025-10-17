@@ -206,7 +206,7 @@ weave('{{:now,H:i:s}}'); // 12:45:57
 The key may be passed in as a variable or as a paramater. 
 ```php
 weave('{{:config,app.name') // Weave
-weave('{{:config', ['pp.name') // Weave
+weave('{{:config', ['app.name') // Weave
 ```
 
 #### default
