@@ -86,7 +86,7 @@ class EmojifyString implements StringFunction
     {
         $emojis = [':cool:' => '😎', ':fire' => '🔥'];        
         
-        return Str::swap($emojis, $string)
+        return Str::swap($emojis, $string);
     }
 }
 ```
@@ -98,7 +98,7 @@ return [
     'string_functions' => [        
         'emojify' => EmojifyString::class
     ],
-]
+];
 ```
 
 3. Now use it!
@@ -209,24 +209,24 @@ weave('{{:now,H:i:s}}'); // 12:45:57
 `config` allows you to pull in a string from your Laravel configs. 
 The key may be passed in as a variable or as a paramater. 
 ```php
-weave('{{:config,app.name}}') // Weave
-weave('{{:config}}', ['app.name']) // Weave
+weave('{{:config,app.name}}'); // Weave
+weave('{{:config}}', ['app.name']); // Weave
 ```
 
 #### default
 `default` allows you to provide a default value when the input variable does not provide it.
 You can also omit the parameter to remove the token when the input is missing.
 ```php
-weave('Hi {{name|default}}!') // Hi !
-weave('Hi {{name|default,John}}!', ['title' => 'This is not the name']) // Hi John!
+weave('Hi {{name|default}}!'); // Hi !
+weave('Hi {{name|default,John}}!', ['title' => 'This is not the name']); // Hi John!
 ```
 
 #### required
 By default, when the token cannot be matched or interpolated the token is left as is.
 `required` allows you to change this behavior and make it throw an exception instead.
 ```php
-weave('Hi {{name|required}}!') ‼️ RequiredStringException
-weave('Hi {{name|required}}!', ['age' => '1']) ‼️ RequiredStringException
+weave('Hi {{name|required}}!'); ‼️ RequiredStringException
+weave('Hi {{name|required}}!', ['age' => '1']); ‼️ RequiredStringException
 ```
 
 
