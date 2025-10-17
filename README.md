@@ -222,7 +222,7 @@ weave('{{:now,H:i:s}}'); // 12:45:57
 ```
 
 #### of
-`of` generates a string based of given parameter. 
+`of` generates a string based off of given parameter. 
 It generates an empty string  if no parameter is provider.
 ```php
 weave('{{:of}}',["passthrough"]); // passthrough 
