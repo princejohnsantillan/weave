@@ -63,7 +63,7 @@ weave('{{title:kebab|upper}}', ['This is a breaking news']); // THIS-IS-A-BREAKI
 weave('{{controller:append,Controller|studly}}', ['controller'=> 'user']); // UserController
 
 /**
- * Generate strings like the datetime now. 
+ * Generate the current datetime string.
  */
 weave('Today is {{:now,Y-m-d}}!'); // Today is 2025-10-16!
 ```
@@ -84,7 +84,7 @@ class EmojifyString implements StringFunction
 {
     public static function handle(FunctionDefinition $definition, None|string $string): string
     {
-        $emojis = [':cool:' => '😎', ':fire' => '🔥'];        
+        $emojis = [':cool:' => '😎', ':fire:' => '🔥'];        
         
         return Str::swap($emojis, $string);
     }
@@ -105,7 +105,7 @@ return [
 ```php
 use function PrinceJohn\Weave\weave;
 
-weave('This is {{:emojify}} and {{:emojify}}!', [':fire:',':cool:']); // This is 🔥and 😎!
+weave('This is {{:emojify}} and {{:emojify}}!', [':fire:',':cool:']); // This is 🔥 and 😎!
 ```
 
 ## Available Functions
@@ -199,14 +199,14 @@ Weave has a few additional built-in functions apart from the functions provided 
 
 #### config
 `config` allows you to pull in a string from your Laravel configs. 
-The key may be passed in as a variable or as a paramater. 
+The key may be passed in as a variable or as a parameter. 
 ```php
 weave('{{:config,app.name}}'); // Weave
 weave('{{:config}}', ['app.name']); // Weave
 ```
 
 #### default
-`default` allows you to provide a default value when the input variable does not provide it.
+`default` allows you to provide a default value when the input variable does not have a value.
 You can also omit the parameter to remove the token when the input is missing.
 ```php
 weave('Hi {{name:default}}!'); // Hi !
@@ -222,8 +222,8 @@ weave('{{:now,H:i:s}}'); // 12:45:57
 ```
 
 #### of
-`of` generates a string based off of given parameter. 
-It generates an empty string  if no parameter is provided.
+`of` generates a string based on the given parameter. 
+It generates an empty string if no parameter is provided.
 ```php
 weave('{{:of}}',["passthrough"]); // passthrough 
 weave('{{:of}}'); // ""
