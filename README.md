@@ -221,7 +221,7 @@ weave('{{:now}}'); // 2025-10-17 12:45:57
 weave('{{:now,H:i:s}}'); // 12:45:57 
 ```
 
-#### now
+#### of
 `of` generates a string based of given parameter. 
 It generates an empty string  if no parameter is provider.
 ```php
