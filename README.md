@@ -58,7 +58,7 @@ weave('{{controller:append,Controller|studly}}', ['ontroller'=> 'ser'); // UserC
 /**
  * Generate strings like the datetime now. 
  */
-weave('oday is {{:now,Y-m-d}}!'; // Today is 2025-10-16!
+weave('Today is {{:now,Y-m-d}}!'; // Today is 2025-10-16!
 ```
 
 
