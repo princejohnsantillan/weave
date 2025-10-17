@@ -1,8 +1,5 @@
 ![Weave](https://banners.beyondco.de/Weave.png?theme=light&packageManager=composer+require&packageName=princejohnsantillan%2Fweave&pattern=bamboo&style=style_2&description=An+elegant+and+easy+way+to+format+strings+and+stubs.&md=1&showWatermark=0&fontSize=125px&images=https%3A%2F%2Flaravel.com%2Fimg%2Flogomark.min.svg&widths=250&heights=250)
 
-
-# Weave
-
 ## Requirements
 |PHP|8.2|8.3|8.4|
 |---|---|---|---|
@@ -206,7 +203,7 @@ weave('{{:now,H:i:s}}'); // 12:45:57
 The key may be passed in as a variable or as a paramater. 
 ```php
 weave('{{:config,app.name') // Weave
-weave('{{:config', ['app.name') // Weave
+weave('{{:config', ['app.name']) // Weave
 ```
 
 #### default
@@ -221,8 +218,8 @@ weave('Hi {{name|default,John}}!', ['title' => 'This is not the name']) // Hi Jo
 By default, when the token cannot be matched or interpolated the token is left as is.
 `required` allows you to change this behavior and make it throw an exception instead.
 ```php
-weave('Hi {{name|required}}!') ‼️RequiredStringException
-weave('Hi {{name|required}}!', ['age' => "1"]) ‼️RequiredStringException
+weave('Hi {{name|required}}!') ‼️ RequiredStringException
+weave('Hi {{name|required}}!', ['age' => '1']) ‼️ RequiredStringException
 ```
 
 
