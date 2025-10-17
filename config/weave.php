@@ -27,8 +27,10 @@ return [
     */
 
     'string_functions' => [
-        'now' => \PrinceJohn\Weave\Functions\NowString::class,
         'config' => \PrinceJohn\Weave\Functions\ConfigString::class,
+        'default' => \PrinceJohn\Weave\Functions\DefaultString::class,
+        'now' => \PrinceJohn\Weave\Functions\NowString::class,
+        'required' => \PrinceJohn\Weave\Functions\RequiredString::class,
     ],
 
 ];

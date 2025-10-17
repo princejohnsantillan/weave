@@ -1,8 +1,15 @@
-![Weave](https://github.com/user-attachments/assets/6a7d7f71-3921-48b3-bf25-afb03e0fa430)
+![Weave](https://banners.beyondco.de/Weave.png?theme=light&packageManager=composer+require&packageName=princejohnsantillan%2Fweave&pattern=bamboo&style=style_2&description=An+elegant+and+easy+way+to+format+strings+and+stubs.&md=1&showWatermark=0&fontSize=125px&images=https%3A%2F%2Flaravel.com%2Fimg%2Flogomark.min.svg&widths=250&heights=250)
 
 
 # Weave
-An elegant and easy way to format strings and stubs.
+
+## Requirements
+|PHP|8.2|8.3|8.4|
+|---|---|---|---|
+
+|Laravel|11.x| 12.x|
+|-------|----|-----|
+
 
 ## Installation
 
@@ -23,13 +30,13 @@ use function PrinceJohn\Weave\weave;
 
 /**
  *  Swap tokens with values from an array list.
- *  Index positioning should be observed here. 
+ *  Tokens and values are matched by index position. 
  */
 weave('Hi {{name}}! Your role is: {{role}}', ['Prince', 'magician']); // Hi Prince! Your role is: magician 
 
 /**
  *  Swap tokens with values from an associative array.
- *  Array keys here should correspond to the token names. 
+ *  Tokens and values are matched by token name and array keys. 
  */
 weave('Hi {{name}}! Your role is: {{role}}', [
     'name' => 'John', 
@@ -37,20 +44,26 @@ weave('Hi {{name}}! Your role is: {{role}}', [
 ]); // Hi John! Your role is: developer
 
 /**
- * Generate strings like the datetime now. 
+ * Transform a string.
  */
-weave("Today is {{:now,Y-m-d}}!"); // Today is 2025-10-16!
+weave('{{text:lower}}', ['AN YOU HEAR ME?'); // Can you hear me?
 
 /**
  * Compound string transformations.
  */
-weave("{{title:kebab|upper}}", ["this is a breaking news"]); // THIS-IS-A-BREAKING-NEWS
+weave('{{title:kebab|upper}}', ['his is a breaking news'); // THIS-IS-A-BREAKING-NEWS
 
 /**
  * Provide string transformations with a parameter.
  */
-weave("{{controller:append,Controller|studly}}", ["controller" => "user"]); // UserController
+weave('{{controller:append,Controller|studly}}', ['ontroller'=> 'ser'); // UserController
+
+/**
+ * Generate strings like the datetime now. 
+ */
+weave('oday is {{:now,Y-m-d}}!'; // Today is 2025-10-16!
 ```
+
 
 ## Custom Functions
 You can also register your own custom functions. All you need to do is create a class that implements
@@ -60,6 +73,8 @@ the `\PrinceJohn\Weave\Contracts\StringFunction` interface and register it on th
 ```php
 use Illuminate\Support\Str;
 use PrinceJohn\Weave\Contracts\StringFunction;
+use PrinceJohn\Weave\FunctionDefinition;
+use PrinceJohn\Weave\None;
 
 class EmojifyString implements StringFunction
 {
@@ -76,9 +91,7 @@ class EmojifyString implements StringFunction
 ```php
 
 return [
-    'string_functions' => [
-        'now' => \PrinceJohn\Weave\Functions\NowString::class,
-        'config' => \PrinceJohn\Weave\Functions\ConfigString::class,
+    'string_functions' => [        
         'emojify' => EmojifyString::class
     ],
 ]
@@ -88,9 +101,8 @@ return [
 ```php
 use function PrinceJohn\Weave\weave;
 
-weave("This is {{:emojify}} and {{:emojify}}!", [":fire:",":cool:"]); // This is 🔥and 😎!
+weave('This is {{:emojify}} and {{:emojify}}!', [':fire:',':cool:']); // This is 🔥and 😎!
 ```
-
 
 ## Available Functions
 
@@ -177,3 +189,40 @@ All of these functions are based off of Laravel's string helpers, [see here](htt
 - [word_wrap](https://laravel.com/docs/12.x/strings#method-str-word-wrap)
 - [words](https://laravel.com/docs/12.x/strings#method-fluent-str-words)
 - [wrap](https://laravel.com/docs/12.x/strings#method-fluent-str-wrap)
+
+## Additional Functions
+Weave has a few additional built-in functions apart from the functions provided by Laravel.
+
+#### now
+`now` generates the current datetime. This uses Laravel's `now()` method. 
+You can optionally pass in a parameter to define the format.
+```php
+weave('{{:now}}'); // 2025-10-17 12:45:57
+weave('{{:now,H:i:s}}'); // 12:45:57 
+```
+
+#### config
+`config` allows you to pull in a string from your Laravel configs. 
+The key may be passed in as a variable or as a paramater. 
+```php
+weave('{{:config,app.name') // Weave
+weave('{{:config', ['app.name') // Weave
+```
+
+#### default
+`default` allows you to provide a default value when the input variable does not provide it.
+You can also omit the parameter to remove the token when the input is missing.
+```php
+weave('Hi {{name|default}}!') // Hi !
+weave('Hi {{name|default,John}}!', ['title' => 'This is not the name']) // Hi John!
+```
+
+#### required
+By default, when the token cannot be matched or interpolated the token is left as is.
+`required` allows you to change this behavior and make it throw an exception instead.
+```php
+weave('Hi {{name|required}}!') ‼️RequiredStringException
+weave('Hi {{name|required}}!', ['age' => "1"]) ‼️RequiredStringException
+```
+
+
