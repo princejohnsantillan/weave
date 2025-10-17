@@ -50,7 +50,7 @@ weave('I am big: {{name|upper}}! I am small: {{name|lower}}.', [
 /**
  * Transform a string.
  */
-weave('{{text:lower}}', ['CAN YOU HEAR ME?']); // Can you hear me?
+weave('{{text:lower}}', ['CAN YOU HEAR ME?']); // can you hear me?
 
 /**
  * Compound string transformations.
@@ -198,7 +198,7 @@ All of these functions are based on Laravel's string helpers, [see here](https:/
 Weave has a few additional built-in functions apart from the functions provided by Laravel.
 
 #### config
-`config` allows you to pull in a string from your Laravel configs. 
+`config` config allows you to pull a value from your Laravel configuration. 
 The key may be passed in as a variable or as a parameter. 
 ```php
 weave('{{:config,app.name}}'); // Weave
@@ -231,7 +231,7 @@ weave('{{:of,Hey|upper}}'); // HEY
 ```
 
 #### required
-By default, when the token cannot be matched or interpolated, the token is left as is.
+By default, if a token cannot be matched with a value, the token is left as is.
 `required` allows you to change this behavior and make it throw an exception instead.
 ```php
 weave('Hi {{name:required}}!'); ‼️ RequiredStringException
