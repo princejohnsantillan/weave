@@ -4,4 +4,4 @@ namespace PrinceJohn\Weave\Exceptions;
 
 use Exception;
 
-class RequiredStringException extends Exception {}
+final class RequiredStringException extends Exception {}
