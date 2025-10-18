@@ -2,6 +2,8 @@
 
 namespace PrinceJohn\Weave;
 
+use PrinceJohn\Weave\Exceptions\InvalidStringArgumentException;
+
 /**
  * @param  string[]|array<string,string>  $variables
  */
@@ -13,4 +15,28 @@ function weave(string $subject, array $variables = []): string
 function is_none(mixed $variable): bool
 {
     return $variable instanceof None;
+}
+
+/**
+ * @param  string|mixed[]  ...$args
+ * @return array<string|int, string>
+ */
+function str_args(mixed ...$args): array
+{
+    array_walk(
+        $args,
+        fn (&$arg) => ($arg = is_array($arg) ? $arg : [$arg])
+    );
+
+    $args = array_merge(...$args);
+
+    array_walk($args, function (&$arg): void {
+        if (is_array($arg)) {
+            throw InvalidStringArgumentException::arrayConversion();
+        }
+
+        $arg = (string) $arg;
+    });
+
+    return $args;
 }
