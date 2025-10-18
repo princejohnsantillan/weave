@@ -19,7 +19,13 @@ parameters:
 			path: src/FunctionDefinition.php
 
 		-
-			message: '#^Parameter \#1 \$default of method PrinceJohn\\Weave\\FunctionDefinition\:\:firstParameterOrFail\(\) expects string\|null, PrinceJohn\\Weave\\None\|string\|null given\.$#'
+			message: '#^Parameter \#1 \$default of method PrinceJohn\\Weave\\FunctionDefinition\:\:firstParameter\(\) expects string\|null, PrinceJohn\\Weave\\None\|string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Functions/ConfigString.php
+
+		-
+			message: '#^Parameter \#1 \$key of static method Illuminate\\Config\\Repository\:\:string\(\) expects string, string\|null given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Functions/ConfigString.php
@@ -29,12 +35,6 @@ parameters:
 			identifier: return.type
 			count: 1
 			path: src/Functions/DefaultString.php
-
-		-
-			message: '#^Method PrinceJohn\\Weave\\Functions\\OfString\:\:handle\(\) should return string but returns PrinceJohn\\Weave\\None\|string\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Functions/OfString.php
 
 		-
 			message: '#^Method PrinceJohn\\Weave\\Functions\\RequiredString\:\:handle\(\) should return string but returns PrinceJohn\\Weave\\None\|string\.$#'
