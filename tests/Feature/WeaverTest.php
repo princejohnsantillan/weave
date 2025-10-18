@@ -1,5 +1,6 @@
 <?php
 
+use PrinceJohn\Weave\Exceptions\ArrayToStringConversionException;
 use PrinceJohn\Weave\Weaver;
 
 use function PrinceJohn\Weave\weave;
@@ -27,6 +28,24 @@ it('swaps using variadic associative arrays', function () {
 
     expect($string)->toBe('John: admin');
 });
+
+it('swaps using nested associative arrays', function () {
+    $string = weave('{{ user.name:headline }}: {{user.role:upper}}', [
+        'user' => [
+            'name' => 'Prince-John', 'role' => 'staff',
+        ],
+    ]);
+
+    expect($string)->toBe('Prince John: STAFF');
+});
+
+it('throws an error when an array is the value passed to the token from the nested associative arrays', function () {
+    $string = weave('{{ user:headline }}: {{user.role:upper}}', [
+        'user' => [
+            'name' => 'Prince-John', 'role' => 'staff',
+        ],
+    ]);
+})->throws(ArrayToStringConversionException::class);
 
 it('leaves tokens that cannot be matched by a list', function () {
     $string = weave('{{ name }} {{ email }}', ['Prince']);

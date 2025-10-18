@@ -2,8 +2,6 @@
 
 namespace PrinceJohn\Weave;
 
-use PrinceJohn\Weave\Exceptions\InvalidStringArgumentException;
-
 /**
  * @param  string|array<int|string,string>  $variables
  */
@@ -30,15 +28,5 @@ function str_args(mixed ...$args): array
         fn (&$arg) => ($arg = is_array($arg) ? $arg : [$arg])
     );
 
-    $args = array_merge(...$args);
-
-    array_walk($args, function (&$arg): void {
-        if (is_array($arg)) {
-            throw InvalidStringArgumentException::arrayConversion();
-        }
-
-        $arg = (string) $arg;
-    });
-
-    return $args;
+    return array_merge(...$args);
 }

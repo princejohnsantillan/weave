@@ -415,16 +415,22 @@ parameters:
 			path: src/StringResolver.php
 
 		-
-			message: '#^Parameter \#1 \$key of method PrinceJohn\\Weave\\Weaver\:\:getVariable\(\) expects int\|string, PrinceJohn\\Weave\\None\|string given\.$#'
-			identifier: argument.type
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
 			count: 1
 			path: src/Weaver.php
 
 		-
-			message: '#^Cannot cast mixed to string\.$#'
-			identifier: cast.string
+			message: '#^Method PrinceJohn\\Weave\\Weaver\:\:getVariable\(\) should return PrinceJohn\\Weave\\None\|string but returns mixed\.$#'
+			identifier: return.type
 			count: 1
-			path: src/functions.php
+			path: src/Weaver.php
+
+		-
+			message: '#^Parameter \#1 \$key of method PrinceJohn\\Weave\\Weaver\:\:getVariable\(\) expects int\|string, PrinceJohn\\Weave\\None\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Weaver.php
 
 		-
 			message: '#^Function PrinceJohn\\Weave\\str_args\(\) should return array\<int\|string, string\> but returns array\<mixed, mixed\>\.$#'
