@@ -18,11 +18,16 @@ class Weaver
     /** @var string[] */
     protected array $tokens;
 
+    /** @var array<string|int, string> */
+    protected array $variables;
+
+    /** @param string|mixed[] $variables */
     public function __construct(
         protected string $subject,
-        /** @var string[]|array<string,string> $variables */
-        protected array $variables = []
+        string|array ...$variables
     ) {
+        $this->variables = str_args(...$variables);
+
         $this->variablesArrayIsList = array_is_list($this->variables);
 
         $pattern = Config::string('weaver.token_regex', '/(?<!\\\\)\{\{\s*([^{}]*?)\s*\}\}(?<!\\\\)/');

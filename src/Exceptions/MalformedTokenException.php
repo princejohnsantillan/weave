@@ -6,9 +6,9 @@ use Exception;
 
 final class MalformedTokenException extends Exception
 {
-    public const BLANK_TOKEN = 1000;
+    public const BLANK_TOKEN = 2000;
 
-    public const BLANK_FUNCTION = 1010;
+    public const BLANK_FUNCTION = 2010;
 
     public static function blankToken(): MalformedTokenException
     {

@@ -419,3 +419,21 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Weaver.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: src/functions.php
+
+		-
+			message: '#^Function PrinceJohn\\Weave\\str_args\(\) should return array\<int\|string, string\> but returns array\<mixed, mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/functions.php
+
+		-
+			message: '#^Parameter \#1 \.\.\.\$arrays of function array_merge expects array, array\<mixed\>\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/functions.php
