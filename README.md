@@ -26,6 +26,11 @@ php artisan vendor:publish --provider="PrinceJohn\Weave\WeaveServiceProvider"
 use function PrinceJohn\Weave\weave;
 
 /**
+ *  Swap tokens with values from variadic parameters. 
+ */
+weave('Hi {{name}}! Your role is: {{role}}', 'Prince', 'wizard'); // Hi Prince! Your role is: wizard
+
+/**
  *  Swap tokens with values from a list.
  *  Tokens and values are matched by index position. 
  */
@@ -37,13 +42,25 @@ weave('Hi {{name}}! Your role is: {{role}}', ['Prince', 'magician']); // Hi Prin
  */
 weave('Hi {{name}}! Your role is: {{role}}', [
     'name' => 'John', 
-    'role' => 'developer'
+    'role' => 'developer',
 ]); // Hi John! Your role is: developer
+
+/**
+ *  Swap tokens with values from a variadic associative array.
+ *  Arrays are merged from left to right and existing keys will be overwritten. 
+ */
+weave('Hi {{name}}! Your role is: {{role}}', [
+    'name' => 'John', 
+    'role' => 'developer',
+], [
+    'name' => 'Jane',
+    'email' => 'jane@weaver.test',
+]); // Hi Jane! Your role is: developer
 
 /**
  *  Reuse an input value in the same string. 
  */
-weave('I am big: {{name|upper}}! I am small: {{name|lower}}.', [
+weave('I am big: {{name:upper}}! I am small: {{name:lower}}.', [
     'name' => 'JoHn',     
 ]); // I am big: JOHN! I am small: john.
 
