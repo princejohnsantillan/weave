@@ -4,6 +4,12 @@ use PrinceJohn\Weave\Weaver;
 
 use function PrinceJohn\Weave\weave;
 
+it('swaps using a variadic input', function () {
+    $string = weave('{{ name }} {{role}}', 'Prince', 'Wizard');
+
+    expect($string)->toBe('Prince Wizard');
+});
+
 it('swaps using a list', function () {
     $string = weave('{{ name }}', ['Prince']);
 
@@ -14,6 +20,12 @@ it('swaps using an associative array', function () {
     $string = weave('{{ email }}', ['email' => 'prince@weave.repo']);
 
     expect($string)->toBe('prince@weave.repo');
+});
+
+it('swaps using variadic associative arrays', function () {
+    $string = weave('{{ name }}: {{role}}', ['name' => 'John', 'role' => 'staff'], ['role' => 'admin']);
+
+    expect($string)->toBe('John: admin');
 });
 
 it('leaves tokens that cannot be matched by a list', function () {

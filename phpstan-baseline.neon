@@ -433,7 +433,19 @@ parameters:
 			path: src/functions.php
 
 		-
-			message: '#^Parameter \#1 \.\.\.\$arrays of function array_merge expects array, array\<mixed\>\|string given\.$#'
+			message: '#^Only iterables can be unpacked, array\<mixed\>\|string given in argument \#1\.$#'
+			identifier: argument.unpackNonIterable
+			count: 1
+			path: src/functions.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_walk expects array\|object, array\<mixed\>\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/functions.php
+
+		-
+			message: '#^Parameter \#1 \.\.\.\$arrays of function array_merge expects array, mixed given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/functions.php
