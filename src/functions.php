@@ -10,6 +10,9 @@ function weave(string $subject, string|array ...$variables): string
     return (new Weaver($subject, $variables))->weave();
 }
 
+/**
+ * @phpstan-assert-if-true None $variable
+ */
 function is_none(mixed $variable): bool
 {
     return $variable instanceof None;
