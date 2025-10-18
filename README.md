@@ -210,7 +210,7 @@ All of these functions are snake_cased and are based on Laravel's string helpers
 ## Additional Functions
 Weave has a few additional built-in functions apart from the functions provided by Laravel.
 
-#### **config** `Generator`
+#### **config** <small>`Generator`</small>
 `config` allows you to pull a value from your Laravel configuration. 
 The key may be passed in as a variable or as a parameter.
 
@@ -219,7 +219,7 @@ weave('{{:config,app.name}}'); // Weave
 weave('{{:config}}', ['app.name']); // Weave
 ```
 
-#### **default** `Generator`
+#### **default** <small>`Generator`</small>
 `default` allows you to provide a default value when the input variable does not have a value.
 You can also omit the parameter to remove the token when the input is missing.
 ```php
@@ -227,7 +227,7 @@ weave('Hi {{name:default}}!'); // Hi !
 weave('Hi {{name:default,John}}!', ['title' => 'This is not the name']); // Hi John!
 ```
 
-#### **now** `Generator`
+#### **now** <small>`Generator`</small>
 `now` generates the current datetime. This uses Laravel's `now()` method.
 You can optionally pass in a parameter to define the format.
 ```php
@@ -235,7 +235,7 @@ weave('{{:now}}'); // 2025-10-17 12:45:57
 weave('{{:now,H:i:s}}'); // 12:45:57 
 ```
 
-#### **of** `Generator`
+#### **of** <small>`Generator`</small>
 `of` generates a string based on the given parameter. 
 It generates an empty string if no parameter is provided.
 ```php 
