@@ -20,7 +20,7 @@ function is_none(mixed $variable): bool
 
 /**
  * @param  string|mixed[]  ...$args
- * @return array<string|int, string>
+ * @return mixed[]
  */
 function str_args(mixed ...$args): array
 {
