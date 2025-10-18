@@ -68,6 +68,19 @@ weave('{{controller:append,Controller|studly}}', ['controller' => 'user']); // U
 weave('Today is {{:now,Y-m-d}}!'); // Today is 2025-10-16!
 ```
 
+## Token Syntax
+![Token Syntax](https://github.com/user-attachments/assets/42682e89-e4c0-43bd-abfa-cf116257748c)
+
+Since `|` and `,` are reserved characters delimiting functions and parameters, you will have to escape them if you 
+want to pass them as a parameter input; like this `\|` or `\,`.
+
+## Types of String Functions
+There are two types of string functions: a **generator** and a **transformer**.
+
+- `Generator`: This is the kind of function that does not need an input string. It creates a new string from scratch.
+- `Transformer`: This is the kind of function that transforms a given input string.
+
+Most string functions are transformers; in this document, generators will be tagged to make them easy to identify.
 
 ## Custom Functions
 You can also register your own custom functions. All you need to do is create a class that implements
@@ -110,7 +123,7 @@ weave('This is {{:emojify}} and {{:emojify}}!', [':fire:', ':cool:']); // This i
 
 ## Available Functions
 
-All of these functions are based on Laravel's string helpers, [see here](https://laravel.com/docs/12.x/strings).
+All of these functions are snake_cased and are based on Laravel's string helpers, [see here](https://laravel.com/docs/12.x/strings).
 
 - [after](https://laravel.com/docs/12.x/strings#method-fluent-str-after)
 - [after_last](https://laravel.com/docs/12.x/strings#method-fluent-str-after-last)
@@ -146,17 +159,17 @@ All of these functions are based on Laravel's string helpers, [see here](https:/
 - [mask](https://laravel.com/docs/12.x/strings#method-fluent-str-mask)
 - [match](https://laravel.com/docs/12.x/strings#method-fluent-str-match)
 - [newline](https://laravel.com/docs/12.x/strings#method-fluent-str-new-line)
-- [ordered_uuid](https://laravel.com/docs/12.x/strings#method-str-ordered-uuid)
+- [ordered_uuid](https://laravel.com/docs/12.x/strings#method-str-ordered-uuid) `Generator`
 - [pad_both](https://laravel.com/docs/12.x/strings#method-fluent-str-padboth)
 - [pad_left](https://laravel.com/docs/12.x/strings#method-fluent-str-padleft)
 - [pad_right](https://laravel.com/docs/12.x/strings#method-fluent-str-padright)
 - [pipe](https://laravel.com/docs/12.x/strings#method-fluent-str-pipe)
-- [password](https://laravel.com/docs/12.x/strings#method-str-password)
+- [password](https://laravel.com/docs/12.x/strings#method-str-password) `Generator`
 - [plural](https://laravel.com/docs/12.x/strings#method-fluent-str-plural)
 - [plural_studly](https://laravel.com/docs/12.x/strings#method-str-plural-studly)
 - [position](https://laravel.com/docs/12.x/strings#method-fluent-str-position)
 - [prepend](https://laravel.com/docs/12.x/strings#method-fluent-str-prepend)
-- [random](https://laravel.com/docs/12.x/strings#method-str-random)
+- [random](https://laravel.com/docs/12.x/strings#method-str-random) `Generator`
 - [remove](https://laravel.com/docs/12.x/strings#method-fluent-str-remove)
 - [repeat](https://laravel.com/docs/12.x/strings#method-fluent-str-repeat)
 - [replace](https://laravel.com/docs/12.x/strings#method-fluent-str-replace)
@@ -185,10 +198,10 @@ All of these functions are based on Laravel's string helpers, [see here](https:/
 - [rtrim](https://laravel.com/docs/12.x/strings#method-fluent-str-rtrim)
 - [ucfirst](https://laravel.com/docs/12.x/strings#method-fluent-str-ucfirst)
 - [upper](https://laravel.com/docs/12.x/strings#method-fluent-str-upper)
-- [ulid](https://laravel.com/docs/12.x/strings#method-str-ulid)
+- [ulid](https://laravel.com/docs/12.x/strings#method-str-ulid) `Generator`
 - [unwrap](https://laravel.com/docs/12.x/strings#method-fluent-str-unwrap)
-- [uuid](https://laravel.com/docs/12.x/strings#method-str-uuid)
-- [uuid7](https://laravel.com/docs/12.x/strings#method-str-uuid7)
+- [uuid](https://laravel.com/docs/12.x/strings#method-str-uuid) `Generator`
+- [uuid7](https://laravel.com/docs/12.x/strings#method-str-uuid7) `Generator`
 - [word_count](https://laravel.com/docs/12.x/strings#method-fluent-str-word-count)
 - [word_wrap](https://laravel.com/docs/12.x/strings#method-str-word-wrap)
 - [words](https://laravel.com/docs/12.x/strings#method-fluent-str-words)
@@ -197,15 +210,16 @@ All of these functions are based on Laravel's string helpers, [see here](https:/
 ## Additional Functions
 Weave has a few additional built-in functions apart from the functions provided by Laravel.
 
-#### config
+#### config `Generator`
 `config` allows you to pull a value from your Laravel configuration. 
-The key may be passed in as a variable or as a parameter. 
+The key may be passed in as a variable or as a parameter.
+
 ```php
 weave('{{:config,app.name}}'); // Weave
 weave('{{:config}}', ['app.name']); // Weave
 ```
 
-#### default
+#### default `Generator`
 `default` allows you to provide a default value when the input variable does not have a value.
 You can also omit the parameter to remove the token when the input is missing.
 ```php
@@ -213,7 +227,7 @@ weave('Hi {{name:default}}!'); // Hi !
 weave('Hi {{name:default,John}}!', ['title' => 'This is not the name']); // Hi John!
 ```
 
-#### now
+#### now `Generator`
 `now` generates the current datetime. This uses Laravel's `now()` method.
 You can optionally pass in a parameter to define the format.
 ```php
@@ -221,11 +235,10 @@ weave('{{:now}}'); // 2025-10-17 12:45:57
 weave('{{:now,H:i:s}}'); // 12:45:57 
 ```
 
-#### of
+#### of `Generator`
 `of` generates a string based on the given parameter. 
 It generates an empty string if no parameter is provided.
-```php
-weave('{{:of}}', ['passthrough']); // passthrough 
+```php 
 weave('{{:of}}'); // ""
 weave('{{:of,Hey|upper}}'); // HEY 
 ```
