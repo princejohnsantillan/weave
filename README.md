@@ -138,6 +138,16 @@ use function PrinceJohn\Weave\weave;
 weave('This is {{:emojify}} and {{:emojify}}!', [':fire:', ':cool:']); // This is 🔥 and 😎!
 ```
 
+<ins>**Tips on Writing String Functions**</ins>
+- The `FunctionDefinition` class provides access to the function name and parameters from the token strings.
+    - `$definition->function`: returns a string — the name of the function.
+    - `$definition->parameters`: returns an array of strings — the parameters of the function.
+    - Helpful methods are also available in the class:  
+      `hasParameters`, `getParameter`, `getParameterOrFail`, `getParameters`,  
+      `limitParameters`, `firstParameter`, `firstParameterOrFail`.
+- The `None` class is used instead of `null` when no input string is provided to the string function.
+    - A helper function `is_none($variable)` is available to check whether a variable is `None`. It works similarly to `is_null`.
+
 ## Available Functions
 
 All of these functions are snake_cased and are based on Laravel's string helpers, [see here](https://laravel.com/docs/12.x/strings).
