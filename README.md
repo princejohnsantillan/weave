@@ -69,6 +69,7 @@ weave('Today is {{:now,Y-m-d}}!'); // Today is 2025-10-16!
 ```
 
 ## Token Syntax
+![Token Syntax](https://github.com/user-attachments/assets/42682e89-e4c0-43bd-abfa-cf116257748c)
 
 
 ## Types of String Functions
