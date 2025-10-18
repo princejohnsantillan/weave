@@ -159,17 +159,17 @@ All of these functions are snake_cased and are based on Laravel's string helpers
 - [mask](https://laravel.com/docs/12.x/strings#method-fluent-str-mask)
 - [match](https://laravel.com/docs/12.x/strings#method-fluent-str-match)
 - [newline](https://laravel.com/docs/12.x/strings#method-fluent-str-new-line)
-- [ordered_uuid](https://laravel.com/docs/12.x/strings#method-str-ordered-uuid) `Generator`
+- [ordered_uuid](https://laravel.com/docs/12.x/strings#method-str-ordered-uuid) <sup>`Generator`</sup>
 - [pad_both](https://laravel.com/docs/12.x/strings#method-fluent-str-padboth)
 - [pad_left](https://laravel.com/docs/12.x/strings#method-fluent-str-padleft)
 - [pad_right](https://laravel.com/docs/12.x/strings#method-fluent-str-padright)
 - [pipe](https://laravel.com/docs/12.x/strings#method-fluent-str-pipe)
-- [password](https://laravel.com/docs/12.x/strings#method-str-password) `Generator`
+- [password](https://laravel.com/docs/12.x/strings#method-str-password) <sup>`Generator`</sup>
 - [plural](https://laravel.com/docs/12.x/strings#method-fluent-str-plural)
 - [plural_studly](https://laravel.com/docs/12.x/strings#method-str-plural-studly)
 - [position](https://laravel.com/docs/12.x/strings#method-fluent-str-position)
 - [prepend](https://laravel.com/docs/12.x/strings#method-fluent-str-prepend)
-- [random](https://laravel.com/docs/12.x/strings#method-str-random) `Generator`
+- [random](https://laravel.com/docs/12.x/strings#method-str-random) <sup>`Generator`</sup>
 - [remove](https://laravel.com/docs/12.x/strings#method-fluent-str-remove)
 - [repeat](https://laravel.com/docs/12.x/strings#method-fluent-str-repeat)
 - [replace](https://laravel.com/docs/12.x/strings#method-fluent-str-replace)
@@ -198,10 +198,10 @@ All of these functions are snake_cased and are based on Laravel's string helpers
 - [rtrim](https://laravel.com/docs/12.x/strings#method-fluent-str-rtrim)
 - [ucfirst](https://laravel.com/docs/12.x/strings#method-fluent-str-ucfirst)
 - [upper](https://laravel.com/docs/12.x/strings#method-fluent-str-upper)
-- [ulid](https://laravel.com/docs/12.x/strings#method-str-ulid) `Generator`
+- [ulid](https://laravel.com/docs/12.x/strings#method-str-ulid) <sup>`Generator`</sup>
 - [unwrap](https://laravel.com/docs/12.x/strings#method-fluent-str-unwrap)
-- [uuid](https://laravel.com/docs/12.x/strings#method-str-uuid) `Generator`
-- [uuid7](https://laravel.com/docs/12.x/strings#method-str-uuid7) `Generator`
+- [uuid](https://laravel.com/docs/12.x/strings#method-str-uuid) <sup>`Generator`</sup>
+- [uuid7](https://laravel.com/docs/12.x/strings#method-str-uuid7) <sup>`Generator`</sup>
 - [word_count](https://laravel.com/docs/12.x/strings#method-fluent-str-word-count)
 - [word_wrap](https://laravel.com/docs/12.x/strings#method-str-word-wrap)
 - [words](https://laravel.com/docs/12.x/strings#method-fluent-str-words)
@@ -210,7 +210,8 @@ All of these functions are snake_cased and are based on Laravel's string helpers
 ## Additional Functions
 Weave has a few additional built-in functions apart from the functions provided by Laravel.
 
-#### config `Generator`
+#### <ins>**config**</ins> <sup>`Generator`</sup>
+
 `config` allows you to pull a value from your Laravel configuration. 
 The key may be passed in as a variable or as a parameter.
 
@@ -219,7 +220,7 @@ weave('{{:config,app.name}}'); // Weave
 weave('{{:config}}', ['app.name']); // Weave
 ```
 
-#### default `Generator`
+#### <ins>**default**</ins> <sup>`Generator`</sup>
 `default` allows you to provide a default value when the input variable does not have a value.
 You can also omit the parameter to remove the token when the input is missing.
 ```php
@@ -227,7 +228,7 @@ weave('Hi {{name:default}}!'); // Hi !
 weave('Hi {{name:default,John}}!', ['title' => 'This is not the name']); // Hi John!
 ```
 
-#### now `Generator`
+#### <ins>**now**</ins> <sup>`Generator`</sup>
 `now` generates the current datetime. This uses Laravel's `now()` method.
 You can optionally pass in a parameter to define the format.
 ```php
@@ -235,7 +236,7 @@ weave('{{:now}}'); // 2025-10-17 12:45:57
 weave('{{:now,H:i:s}}'); // 12:45:57 
 ```
 
-#### of `Generator`
+#### <ins>**of**</ins> <sup>`Generator`</sup>
 `of` generates a string based on the given parameter. 
 It generates an empty string if no parameter is provided.
 ```php 
@@ -243,7 +244,7 @@ weave('{{:of}}'); // ""
 weave('{{:of,Hey|upper}}'); // HEY 
 ```
 
-#### required
+#### <ins>**required**</ins>
 By default, if a token cannot be matched with a value, the token is left as is.
 `required` allows you to change this behavior and make it throw an exception instead.
 ```php
