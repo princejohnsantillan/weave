@@ -14,7 +14,7 @@ class ConfigString implements StringFunction
     public static function handle(FunctionDefinition $definition, None|string $string): string
     {
         return Config::string(
-            $definition->firstParameter(is_none($string) ? null : $string),
+            $definition->firstParameterOrFail(is_none($string) ? null : $string),
             $definition->getParameter(1, '')
         );
     }

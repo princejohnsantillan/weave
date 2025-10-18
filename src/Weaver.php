@@ -19,7 +19,7 @@ class Weaver
     /** @var string[] */
     protected array $tokens;
 
-    /** @var array<string|int, string> */
+    /** @var mixed[] */
     protected array $variables;
 
     /** @param string|mixed[] $variables */

@@ -19,12 +19,6 @@ parameters:
 			path: src/FunctionDefinition.php
 
 		-
-			message: '#^Parameter \#1 \$key of static method Illuminate\\Config\\Repository\:\:string\(\) expects string, string\|null given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Functions/ConfigString.php
-
-		-
 			message: '#^Method PrinceJohn\\Weave\\StringResolver\:\:resolveString\(\) should return string\|false but returns Illuminate\\Support\\Stringable\|int\|string\|false\.$#'
 			identifier: return.type
 			count: 1
@@ -173,12 +167,6 @@ parameters:
 			identifier: cast.string
 			count: 1
 			path: src/Weaver.php
-
-		-
-			message: '#^Function PrinceJohn\\Weave\\str_args\(\) should return array\<int\|string, string\> but returns array\<mixed, mixed\>\.$#'
-			identifier: return.type
-			count: 1
-			path: src/functions.php
 
 		-
 			message: '#^Only iterables can be unpacked, array\<mixed\>\|string given in argument \#1\.$#'
