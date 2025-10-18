@@ -58,6 +58,16 @@ weave('Hi {{name}}! Your role is: {{role}}', [
 ]); // Hi Jane! Your role is: developer
 
 /**
+ * Swap tokens with values from a nested arrays.
+ */
+weave('{{ user.name:headline }}: {{user.role:upper}}', [
+    'user' => [
+        'name' => 'Prince-John',
+        'role' => 'staff',
+    ],
+]); // Prince John: STAFF
+    
+/**
  *  Reuse an input value in the same string. 
  */
 weave('I am big: {{name:upper}}! I am small: {{name:lower}}.', [
@@ -84,6 +94,12 @@ weave('{{controller:append,Controller|studly}}', ['controller' => 'user']); // U
  */
 weave('Today is {{:now,Y-m-d}}!'); // Today is 2025-10-16!
 ```
+
+## Use Cases
+Weave is an alternative way of formatting strings. It can do what `sprintf` and `vsprint` do.
+But where **`weave`** really shines is in scenarios where control is predominantly on the template string side — for example, in stubs or email templates.
+Since **`weave`** allows for custom string functions, template strings can be empowered with application-specific string transformations.
+
 
 ## Token Syntax
 ![Token Syntax](https://github.com/user-attachments/assets/42682e89-e4c0-43bd-abfa-cf116257748c)

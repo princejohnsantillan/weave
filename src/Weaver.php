@@ -4,6 +4,7 @@ namespace PrinceJohn\Weave;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
+use PrinceJohn\Weave\Exceptions\ArrayToStringConversionException;
 use PrinceJohn\Weave\Exceptions\TokenMatchingFailedException;
 
 class Weaver
@@ -58,7 +59,17 @@ class Weaver
 
     protected function getVariable(string|int $key): None|string
     {
-        return $this->variables[$key] ?? new None;
+        $string = data_get($this->variables, $key, new None);
+
+        if (is_none($string)) {
+            return $string;
+        }
+
+        if (is_array($string)) {
+            throw new ArrayToStringConversionException;
+        }
+
+        return (string) $string;
     }
 
     public function getTokenCount(): int
