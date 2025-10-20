@@ -17,6 +17,6 @@ it('can generate a formatted string of the datetime now', function () {
     $now = weave('{{=now:Y-m-d}}');
     expect($now)->toBe('2025-10-16');
 
-    $now = weave('{{=now:H:i:s}}');
+    $now = weave('{{=now:H\:i\:s}}');
     expect($now)->toBe('11:37:17');
 });

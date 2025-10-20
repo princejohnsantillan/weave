@@ -96,7 +96,7 @@ it('can get the placeholders', function () {
 });
 
 it('can receive and use function parameters', function () {
-    $string = weave('{{title=upper|pad_both:20,-}}', 'This is a test');
+    $string = weave('{{title=after:This is |upper|pad_both:20,- }}', 'This is a test');
 
-    expect($string)->toBe('---THIS IS A TEST---');
+    expect($string)->toBe('-------A TEST-------');
 });
