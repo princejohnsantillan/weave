@@ -54,9 +54,9 @@ it('leaves tokens that cannot be matched by a list', function () {
 });
 
 it('leaves tokens that cannot be matched by an associative array', function () {
-    $string = weave('{{ name=ucfirst|prepend:Mr., }} {{ email }}', ['email' => 'prince@weave.repo']);
+    $string = weave('{{ name=camel|prepend:Mr., }} {{ email }}', ['email' => 'prince@weave.repo']);
 
-    expect($string)->toBe('{{ name=ucfirst|prepend:Mr., }} prince@weave.repo');
+    expect($string)->toBe('{{ name=camel|prepend:Mr., }} prince@weave.repo');
 });
 
 it('can transform a token', function () {
@@ -102,7 +102,7 @@ it('can receive and use function parameters', function () {
 });
 
 it('can generate strings', function () {
-   $string = weave('{{=of:Start with this string|append: then continue it.}}');
+    $string = weave('{{=of:Start with this string|append: then continue it.}}');
 
-   expect($string)->toBe('Start with this string then continue it.');
+    expect($string)->toBe('Start with this string then continue it.');
 });
