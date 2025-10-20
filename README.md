@@ -102,7 +102,7 @@ Since **`weave`** allows for custom string functions, template strings can be em
 
 
 ## Token Syntax
-![Token Syntax](https://github.com/user-attachments/assets/42682e89-e4c0-43bd-abfa-cf116257748c)
+![Token Syntax](https://github.com/user-attachments/assets/ecbe3a99-3b29-468c-aafe-f3d91d8f8780)
 
 Since `=`, `|`, `:`, and `,` are reserved characters delimiting functions and parameters, you will have to escape them if you 
 want to pass them as a parameter input; like this `\=`, `\|`, `\:`, or `\,`.
