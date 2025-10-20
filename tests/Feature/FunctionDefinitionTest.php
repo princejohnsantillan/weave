@@ -51,7 +51,7 @@ it('can get the first parameter', function () {
     expect($definition->firstParameter('one'))->toBe('one');
 });
 
-it('can fail if the parameter is does not exists', function () {
+it('can fail if the parameter does not exists', function () {
     $definition = new FunctionDefinition('myfunc:index', ['param']);
 
     expect($definition->getParameterOrFail(0))->toBe('param');
@@ -60,7 +60,7 @@ it('can fail if the parameter is does not exists', function () {
     $definition->getParameterOrFail(2);
 })->throws(exception: ParameterDoesNotExistException::class, exceptionCode: ParameterDoesNotExistException::ON_INDEX);
 
-it('can fail if the first parameter is does not exists', function () {
+it('can fail if the first parameter does not exists', function () {
     $definition = new FunctionDefinition('myfunc:index', ['first']);
 
     expect($definition->firstParameterOrFail())->toBe('first');
