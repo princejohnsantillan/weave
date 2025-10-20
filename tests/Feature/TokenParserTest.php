@@ -9,7 +9,7 @@ it('does not parse an empty string', function () {
     new TokenParser('   ');
 })->throws(exception: MalformedTokenException::class, exceptionCode: MalformedTokenException::BLANK_TOKEN);
 
-it('does not parse tokens with empty function definition when a colon exists', function () {
+it('does not parse tokens with empty function definition when the equal sign delimiter exists', function () {
     new TokenParser('key=');
 })->throws(exception: MalformedTokenException::class, exceptionCode: MalformedTokenException::BLANK_FUNCTION);
 
@@ -51,7 +51,7 @@ it('can get a function definition list ', function () {
     expect($parser->getFunctionDefinitionList()[1]->parameters)->toBe(['param1']);
 });
 
-it('can escape comma and pipe characters', function () {
+it('can escape reserved parser characters', function () {
     $parser = new TokenParser('new\=key=func\:1:This is a \,,That is a \||func\:2:0,1');
 
     expect($parser->hasKey())->toBeTrue();

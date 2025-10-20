@@ -39,7 +39,7 @@ it('swaps using nested associative arrays', function () {
     expect($string)->toBe('Prince John: STAFF');
 });
 
-it('throws an error when an array is the value passed to the token from the nested associative arrays', function () {
+it('throws an error when the value plucked from the dot notation is an array', function () {
     $string = weave('{{ user=headline }}: {{user.role=upper}}', [
         'user' => [
             'name' => 'Prince-John', 'role' => 'staff',
@@ -99,4 +99,10 @@ it('can receive and use function parameters', function () {
     $string = weave('{{title=after:This is |upper|pad_both:20,- }}', 'This is a test');
 
     expect($string)->toBe('-------A TEST-------');
+});
+
+it('can generate strings', function () {
+   $string = weave('{{=of:Start with this string|append: then continue it.}}');
+
+   expect($string)->toBe('Start with this string then continue it.');
 });
