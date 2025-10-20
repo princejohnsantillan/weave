@@ -10,6 +10,6 @@ final class ParameterDoesNotExistException extends Exception
 
     public static function onIndex(int $index): ParameterDoesNotExistException
     {
-        return new ParameterDoesNotExistException("[Index({$index}) parameter does not exist.", ParameterDoesNotExistException::ON_INDEX);
+        return new ParameterDoesNotExistException("Index({$index}) parameter does not exist.", ParameterDoesNotExistException::ON_INDEX);
     }
 }
