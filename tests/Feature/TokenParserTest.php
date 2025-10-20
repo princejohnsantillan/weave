@@ -10,18 +10,18 @@ it('does not parse an empty string', function () {
 })->throws(exception: MalformedTokenException::class, exceptionCode: MalformedTokenException::BLANK_TOKEN);
 
 it('does not parse tokens with empty function definition when a colon exists', function () {
-    new TokenParser('key:');
+    new TokenParser('key=');
 })->throws(exception: MalformedTokenException::class, exceptionCode: MalformedTokenException::BLANK_FUNCTION);
 
 it('uses a None object as the key if none is provided', function () {
-    $parser = new TokenParser(':config');
+    $parser = new TokenParser('=config');
 
     expect($parser->getKey())->toBeInstanceOf(None::class);
     expect($parser->hasKey())->toBeFalse();
 });
 
 it('can get the key from a token with a function', function () {
-    $parser = new TokenParser('this-key:config');
+    $parser = new TokenParser('this-key=config');
 
     expect($parser->getKey())->toBe('this-key');
     expect($parser->hasKey())->toBeTrue();
@@ -35,7 +35,7 @@ it('can get the key from a token without a function', function () {
 });
 
 it('can get a function definition list ', function () {
-    $parser = new TokenParser('key:func1,param1,param2|func2,param1');
+    $parser = new TokenParser('key=func1:param1,param2|func2:param1');
 
     expect($parser->hasFunctions())->toBeTrue();
     expect($parser->getFunctionDefinitionList())->toHaveCount(2);
@@ -52,9 +52,10 @@ it('can get a function definition list ', function () {
 });
 
 it('can escape comma and pipe characters', function () {
-    $parser = new TokenParser('new key:func:1,This is a \,,That is a \||func:2,0,1');
+    $parser = new TokenParser('new\=key=func\:1:This is a \,,That is a \||func\:2:0,1');
 
     expect($parser->hasKey())->toBeTrue();
+    expect($parser->getKey())->toBe('new=key');
     expect($parser->hasFunctions())->toBeTrue();
     expect($parser->getFunctionDefinitionList())->toHaveCount(2);
     expect($parser->getFunctionDefinitionList()[0]->function)->toBe('func:1');

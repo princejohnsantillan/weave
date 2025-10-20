@@ -5,35 +5,39 @@ namespace PrinceJohn\Weave;
 use Illuminate\Support\Str;
 use PrinceJohn\Weave\Exceptions\MalformedTokenException;
 
-class TokenParser
+final class TokenParser
 {
-    protected None|string $key;
+    private None|string $key;
 
     /** @var FunctionDefinition[] */
-    protected array $functionDefinitionList = [];
+    private array $functionDefinitionList = [];
 
-    public function __construct(protected string $token)
+    /** @var array<string,string> */
+    private array $markMap;
+
+    /** @var array<string,string> */
+    private array $unmarkMap;
+
+    public function __construct(private string $token)
     {
-        $this->key = new None;
+        $this->init();
 
-        $token = trim($this->token);
-
-        if (blank($token)) {
+        if (blank($this->token)) {
             throw MalformedTokenException::blankToken();
         }
 
-        if (Str::contains($token, ':')) {
-            $key = Str::of($token)->before(':')->trim()->toString();
+        if (Str::contains($this->token, '=')) {
+            $key = Str::of($this->token)->before('=')->trim()->toString();
 
             if (filled($key)) {
-                $this->key = $key;
+                $this->key = $this->unmark($key);
             }
         } else {
-            $this->key = $token;
+            $this->key = $this->unmark($this->token);
         }
 
-        if (Str::contains($token, ':')) {
-            $functionsString = Str::of($token)->after(':')->trim()->toString();
+        if (Str::contains($this->token, '=')) {
+            $functionsString = Str::of($this->token)->after('=')->trim()->toString();
 
             if ($functionsString === '') {
                 throw MalformedTokenException::blankFunction();
@@ -43,27 +47,42 @@ class TokenParser
         }
     }
 
+    private function init(): void
+    {
+        $this->key = new None;
+
+        // Append Random ID to avoid possible collision with user input.
+        $randomId = bin2hex(random_bytes(2));
+
+        $this->markMap = [
+            "\=" => "EQUAL_{$randomId}",
+            "\|" => "PIPE_{$randomId}",
+            "\:" => "COLON_{$randomId}",
+            "\," => "COMMA_{$randomId}",
+        ];
+
+        $this->unmarkMap = [
+            "EQUAL_{$randomId}" => '=',
+            "PIPE_{$randomId}" => '|',
+            "COLON_{$randomId}" => ':',
+            "COMMA_{$randomId}" => ',',
+        ];
+
+        $this->token = $this->mark(trim($this->token));
+    }
+
+    private function mark(string $string): string
+    {
+        return Str::swap($this->markMap, $string);
+    }
+
+    private function unmark(string $string): string
+    {
+        return Str::swap($this->unmarkMap, $string);
+    }
+
     private function identifyFunctions(string $functionsString): void
     {
-        /**
-         * This is to allow for escaping "|" and ","
-         * since they are special characters to the parser.
-         */
-        $pipeId = uniqid('PIPE:');
-        $commaId = uniqid('COMMA:');
-
-        $mark = [
-            "\|" => $pipeId,
-            "\," => $commaId,
-        ];
-
-        $unmark = [
-            $pipeId => '|',
-            $commaId => ',',
-        ];
-
-        $functionsString = Str::swap($mark, $functionsString);
-
         $functions = explode('|', $functionsString);
 
         if (blank($functions)) {
@@ -71,14 +90,17 @@ class TokenParser
         }
 
         foreach ($functions as $function) {
-            $parameters = explode(',', $function);
+            $method = Str::of($function)->before(':')->trim()->toString();
 
-            $method = array_shift($parameters);
+            /** @var string[] $parameters */
+            $parameters = Str::contains($function, ':')
+                ? Str::of($function)->after(':')->explode(',')->toArray()
+                : [];
 
-            $method = Str::swap($unmark, $method);
+            $method = $this->unmark($method);
 
-            array_walk($parameters, function (&$parameter) use ($unmark) {
-                $parameter = Str::swap($unmark, $parameter);
+            array_walk($parameters, function (&$parameter) {
+                $parameter = $this->unmark($parameter);
             });
 
             $this->functionDefinitionList[] = new FunctionDefinition($method, $parameters);

@@ -30,7 +30,7 @@ it('swaps using variadic associative arrays', function () {
 });
 
 it('swaps using nested associative arrays', function () {
-    $string = weave('{{ user.name:headline }}: {{user.role:upper}}', [
+    $string = weave('{{ user.name=headline }}: {{user.role=upper}}', [
         'user' => [
             'name' => 'Prince-John', 'role' => 'staff',
         ],
@@ -40,7 +40,7 @@ it('swaps using nested associative arrays', function () {
 });
 
 it('throws an error when an array is the value passed to the token from the nested associative arrays', function () {
-    $string = weave('{{ user:headline }}: {{user.role:upper}}', [
+    $string = weave('{{ user=headline }}: {{user.role=upper}}', [
         'user' => [
             'name' => 'Prince-John', 'role' => 'staff',
         ],
@@ -54,25 +54,25 @@ it('leaves tokens that cannot be matched by a list', function () {
 });
 
 it('leaves tokens that cannot be matched by an associative array', function () {
-    $string = weave('{{ name:ucfirst|prepend,Mr., }} {{ email }}', ['email' => 'prince@weave.repo']);
+    $string = weave('{{ name=ucfirst|prepend:Mr., }} {{ email }}', ['email' => 'prince@weave.repo']);
 
-    expect($string)->toBe('{{ name:ucfirst|prepend,Mr., }} prince@weave.repo');
+    expect($string)->toBe('{{ name=ucfirst|prepend:Mr., }} prince@weave.repo');
 });
 
 it('can transform a token', function () {
-    $string = weave('{{ name:upper }}', ['name' => 'prince john']);
+    $string = weave('{{ name=upper }}', ['name' => 'prince john']);
 
     expect($string)->toBe('PRINCE JOHN');
 });
 
 it('can compound multiple transformations on a token', function () {
-    $string = weave('{{ name:slug|upper }}', ['prince john']);
+    $string = weave('{{ name=slug|upper }}', ['prince john']);
 
     expect($string)->toBe('PRINCE-JOHN');
 });
 
 it('tokens can use the same variable', function () {
-    $string = weave('{{ name:upper }} {{ name:slug }}', ['name' => 'prince john']);
+    $string = weave('{{ name=upper }} {{ name=slug }}', ['name' => 'prince john']);
 
     expect($string)->toBe('PRINCE JOHN prince-john');
 });
@@ -84,13 +84,19 @@ it('can count the tokens', function () {
 });
 
 it('can get the tokens', function () {
-    $weaver = new Weaver('{{token1}} {{token2:func}} {{token3:func,param|func}}');
+    $weaver = new Weaver('{{token1}} {{token2=func}} {{token3=func:param|func}}');
 
-    expect($weaver->getTokens())->toBe(['token1', 'token2:func', 'token3:func,param|func']);
+    expect($weaver->getTokens())->toBe(['token1', 'token2=func', 'token3=func:param|func']);
 });
 
 it('can get the placeholders', function () {
-    $weaver = new Weaver('{{token1}} {{token2:func}} {{token3:func,param|func}}');
+    $weaver = new Weaver('{{token1}} {{token2=func}} {{token3=func:param|func}}');
 
-    expect($weaver->getPlaceholders())->toBe(['{{token1}}', '{{token2:func}}', '{{token3:func,param|func}}']);
+    expect($weaver->getPlaceholders())->toBe(['{{token1}}', '{{token2=func}}', '{{token3=func:param|func}}']);
+});
+
+it('can receive and use function parameters', function () {
+    $string = weave('{{title=upper|pad_both:20,-}}', 'This is a test');
+
+    expect($string)->toBe('---THIS IS A TEST---');
 });

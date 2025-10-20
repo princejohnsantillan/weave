@@ -98,7 +98,7 @@ weave('Today is {{:now,Y-m-d}}!'); // Today is 2025-10-16!
 ## Use Cases
 Weave is an alternative way of formatting strings. It can do what `sprintf` and `vsprint` do.
 But where **`weave`** really shines is in scenarios where control is predominantly on the template string side — for example, in stubs or email templates.
-Since **`weave`** allows for custom string functions, template strings can be empowered with application-specific string transformations.
+Since **`weave`** allows for custom string functions, template strings can be empowered with application-specific string transformations/generators.
 
 
 ## Token Syntax
