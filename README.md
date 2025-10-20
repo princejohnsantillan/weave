@@ -60,7 +60,7 @@ weave('Hi {{name}}! Your role is: {{role}}', [
 /**
  * Swap tokens with values from a nested arrays.
  */
-weave('{{ user.name:headline }}: {{user.role:upper}}', [
+weave('{{ user.name=headline }}: {{user.role=upper}}', [
     'user' => [
         'name' => 'Prince-John',
         'role' => 'staff',
@@ -70,42 +70,42 @@ weave('{{ user.name:headline }}: {{user.role:upper}}', [
 /**
  *  Reuse an input value in the same string. 
  */
-weave('I am big: {{name:upper}}! I am small: {{name:lower}}.', [
+weave('I am big: {{name=upper}}! I am small: {{name=lower}}.', [
     'name' => 'JoHn',     
 ]); // I am big: JOHN! I am small: john.
 
 /**
  * Transform a string.
  */
-weave('{{text:lower}}', ['CAN YOU HEAR ME?']); // can you hear me?
+weave('{{text=lower}}', ['CAN YOU HEAR ME?']); // can you hear me?
 
 /**
  * Compound string transformations.
  */
-weave('{{title:kebab|upper}}', ['This is breaking news']); // THIS-IS-BREAKING-NEWS
+weave('{{title=kebab|upper}}', ['This is breaking news']); // THIS-IS-BREAKING-NEWS
 
 /**
  * Provide string transformations with a parameter.
  */
-weave('{{controller:append,Controller|studly}}', ['controller' => 'user']); // UserController
+weave('{{controller=append:Controller|studly}}', ['controller' => 'user']); // UserController
 
 /**
  * Generate the current datetime string.
  */
-weave('Today is {{:now,Y-m-d}}!'); // Today is 2025-10-16!
+weave('Today is {{=now:Y-m-d}}!'); // Today is 2025-10-16!
 ```
 
 ## Use Cases
 Weave is an alternative way of formatting strings. It can do what `sprintf` and `vsprint` do.
 But where **`weave`** really shines is in scenarios where control is predominantly on the template string side — for example, in stubs or email templates.
-Since **`weave`** allows for custom string functions, template strings can be empowered with application-specific string transformations.
+Since **`weave`** allows for custom string functions, template strings can be empowered with application-specific string transformations/generators.
 
 
 ## Token Syntax
-![Token Syntax](https://github.com/user-attachments/assets/42682e89-e4c0-43bd-abfa-cf116257748c)
+![Token Syntax](https://github.com/user-attachments/assets/ecbe3a99-3b29-468c-aafe-f3d91d8f8780)
 
-Since `|` and `,` are reserved characters delimiting functions and parameters, you will have to escape them if you 
-want to pass them as a parameter input; like this `\|` or `\,`.
+Since `=`, `|`, `:`, and `,` are reserved characters delimiting functions and parameters, you will have to escape them if you 
+want to pass them as a parameter input; like this `\=`, `\|`, `\:`, or `\,`.
 
 ## Types of String Functions
 There are two types of string functions: a **generator** and a **transformer**.
@@ -151,7 +151,7 @@ return [
 ```php
 use function PrinceJohn\Weave\weave;
 
-weave('This is {{:emojify}} and {{:emojify}}!', [':fire:', ':cool:']); // This is 🔥 and 😎!
+weave('This is {{=emojify}} and {{=emojify}}!', [':fire:', ':cool:']); // This is 🔥 and 😎!
 ```
 
 <ins>**Tips on Writing String Functions**</ins>
@@ -259,40 +259,40 @@ Weave has a few additional built-in functions apart from the functions provided 
 The key may be passed in as a variable or as a parameter.
 
 ```php
-weave('{{:config,app.name}}'); // Weave
-weave('{{:config}}', ['app.name']); // Weave
+weave('{{=config:app.name}}'); // Weave
+weave('{{=config}}', ['app.name']); // Weave
 ```
 
 #### <ins>**default**</ins> <sup>`Generator`</sup>
 `default` allows you to provide a default value when the input variable does not have a value.
 You can also omit the parameter to remove the token when the input is missing.
 ```php
-weave('Hi {{name:default}}!'); // Hi !
-weave('Hi {{name:default,John}}!', ['title' => 'This is not the name']); // Hi John!
+weave('Hi {{name=default}}!'); // Hi !
+weave('Hi {{name=default:John}}!', ['title' => 'This is not the name']); // Hi John!
 ```
 
 #### <ins>**now**</ins> <sup>`Generator`</sup>
 `now` generates the current datetime. This uses Laravel's `now()` method.
 You can optionally pass in a parameter to define the format.
 ```php
-weave('{{:now}}'); // 2025-10-17 12:45:57
-weave('{{:now,H:i:s}}'); // 12:45:57 
+weave('{{=now}}'); // 2025-10-17 12:45:57
+weave('{{=now:Y-m-d}}'); // 2025-10-17 
 ```
 
 #### <ins>**of**</ins> <sup>`Generator`</sup>
 `of` generates a string based on the given parameter. 
 It generates an empty string if no parameter is provided.
 ```php 
-weave('{{:of}}'); // ""
-weave('{{:of,Hey|upper}}'); // HEY 
+weave('{{=of}}'); // ""
+weave('{{=of:Hey|upper}}'); // HEY 
 ```
 
 #### <ins>**required**</ins>
 By default, if a token cannot be matched with a value, the token is left as is.
 `required` allows you to change this behavior and make it throw an exception instead.
 ```php
-weave('Hi {{name:required}}!'); ‼️ RequiredStringException
-weave('Hi {{name:required}}!', ['age' => '1']); ‼️ RequiredStringException
+weave('Hi {{name=required}}!'); ‼️ RequiredStringException
+weave('Hi {{name=required}}!', ['age' => '1']); ‼️ RequiredStringException
 ```
 
 

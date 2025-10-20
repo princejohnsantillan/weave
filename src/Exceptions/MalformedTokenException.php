@@ -17,6 +17,6 @@ final class MalformedTokenException extends Exception
 
     public static function blankFunction(): MalformedTokenException
     {
-        return new MalformedTokenException('A function name must be provided after the colon.', MalformedTokenException::BLANK_FUNCTION);
+        return new MalformedTokenException('A function name must be provided after the equal sign.', MalformedTokenException::BLANK_FUNCTION);
     }
 }
