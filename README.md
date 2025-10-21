@@ -26,6 +26,11 @@ php artisan vendor:publish --provider="PrinceJohn\Weave\WeaveServiceProvider"
 use function PrinceJohn\Weave\weave;
 
 /**
+ *  Swap tokens using empty placeholders. 
+ */
+weave('Hi {{}}!', 'George'); // Hi George!
+
+/**
  *  Swap tokens with values from variadic parameters. 
  */
 weave('Hi {{name}}! Your role is: {{role}}', 'Prince', 'wizard'); // Hi Prince! Your role is: wizard
