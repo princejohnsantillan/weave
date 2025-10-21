@@ -279,12 +279,12 @@ weave('{{=now}}'); // 2025-10-17 12:45:57
 weave('{{=now:Y-m-d}}'); // 2025-10-17 
 ```
 
-#### <ins>**of**</ins> <sup>`Generator`</sup>
-`of` generates a string based on the given parameter. 
+#### <ins>**str**</ins> <sup>`Generator`</sup>
+`str` generates a string based on the given parameter. 
 It generates an empty string if no parameter is provided.
 ```php 
-weave('{{=of}}'); // ""
-weave('{{=of:Hey|upper}}'); // HEY 
+weave('{{=str}}'); // ""
+weave('{{=str:Hey|upper}}'); // HEY 
 ```
 
 #### <ins>**required**</ins>
