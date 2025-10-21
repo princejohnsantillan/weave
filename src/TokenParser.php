@@ -3,7 +3,6 @@
 namespace PrinceJohn\Weave;
 
 use Illuminate\Support\Str;
-use PrinceJohn\Weave\Exceptions\MalformedTokenException;
 
 final class TokenParser
 {
@@ -22,14 +21,10 @@ final class TokenParser
     {
         $this->init();
 
-        if (blank($this->token)) {
-            throw MalformedTokenException::blankToken();
-        }
-
         if (Str::contains($this->token, '=')) {
-            $key = Str::of($this->token)->before('=')->trim()->toString();
+            $key = Str::of($this->token)->before('=')->trim();
 
-            if (filled($key)) {
+            if ($key->isNotEmpty()) {
                 $this->key = $this->unmark($key);
             }
         } else {
@@ -37,9 +32,9 @@ final class TokenParser
         }
 
         if (Str::contains($this->token, '=')) {
-            $functionsString = Str::of($this->token)->after('=')->trim()->toString();
+            $functionsString = Str::of($this->token)->after('=')->trim();
 
-            if ($functionsString !== '') {
+            if ($functionsString->isNotEmpty()) {
                 $this->identifyFunctions($functionsString);
             }
         }

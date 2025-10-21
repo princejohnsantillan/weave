@@ -108,7 +108,7 @@ it('can generate strings', function () {
 });
 
 it('can swap by position without key or function', function () {
-    $string = weave('{{=}}', 'I like this!');
+    $string = weave('{{}}', 'I like this!');
 
     expect($string)->toBe('I like this!');
 });

@@ -1,13 +1,8 @@
 <?php
 
-use PrinceJohn\Weave\Exceptions\MalformedTokenException;
 use PrinceJohn\Weave\FunctionDefinition;
 use PrinceJohn\Weave\None;
 use PrinceJohn\Weave\TokenParser;
-
-it('does not parse an empty string', function () {
-    new TokenParser('   ');
-})->throws(exception: MalformedTokenException::class, exceptionCode: MalformedTokenException::BLANK_TOKEN);
 
 it('uses a None object as the key if none is provided', function () {
     $parser = new TokenParser('=config');
