@@ -9,10 +9,6 @@ it('does not parse an empty string', function () {
     new TokenParser('   ');
 })->throws(exception: MalformedTokenException::class, exceptionCode: MalformedTokenException::BLANK_TOKEN);
 
-it('does not parse tokens with empty function definition when the equal sign delimiter exists', function () {
-    new TokenParser('key=');
-})->throws(exception: MalformedTokenException::class, exceptionCode: MalformedTokenException::BLANK_FUNCTION);
-
 it('uses a None object as the key if none is provided', function () {
     $parser = new TokenParser('=config');
 
