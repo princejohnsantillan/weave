@@ -39,11 +39,9 @@ final class TokenParser
         if (Str::contains($this->token, '=')) {
             $functionsString = Str::of($this->token)->after('=')->trim()->toString();
 
-            if ($functionsString === '') {
-                throw MalformedTokenException::blankFunction();
+            if ($functionsString !== '') {
+                $this->identifyFunctions($functionsString);
             }
-
-            $this->identifyFunctions($functionsString);
         }
     }
 
