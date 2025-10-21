@@ -102,7 +102,7 @@ it('can receive and use function parameters', function () {
 });
 
 it('can generate strings', function () {
-    $string = weave('{{=of:Start with this string|append: then continue it.}}');
+    $string = weave('{{=str:Start with this string|append: then continue it.}}');
 
     expect($string)->toBe('Start with this string then continue it.');
 });

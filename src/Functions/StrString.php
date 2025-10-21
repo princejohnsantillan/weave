@@ -6,7 +6,7 @@ use PrinceJohn\Weave\Contracts\StringFunction;
 use PrinceJohn\Weave\FunctionDefinition;
 use PrinceJohn\Weave\None;
 
-class OfString implements StringFunction
+class StrString implements StringFunction
 {
     public static function handle(FunctionDefinition $definition, string|None $string): string
     {
